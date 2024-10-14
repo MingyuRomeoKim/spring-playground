@@ -1,0 +1,39 @@
+### Insert Member
+POST http://localhost:8080/api/v1/member
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name": "김민규",
+  "password": "1q2w3e4r!",
+  "email": "mingyu1",
+  "phoneNumber": "01022223333",
+  "address": "asdfasdfasdf"
+}
+
+### Get Members
+GET http://localhost:8080/api/v1/members
+Content-Type: application/json
+Accept: application/json
+
+### Get Member By Email
+GET http://localhost:8080/api/v1/member/mingyu1
+Content-Type: application/json
+Accept: application/json
+
+### Delete member By Email
+DELETE http://localhost:8080/api/v1/member/mingyu1
+Content-Type: application/json
+Accept: application/json
+
+### Update Member By Email
+PUT http://localhost:8080/api/v1/member/mingyu1
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name": "김민규수정",
+  "password": "1q2w3e4r!##",
+  "phone": "0103333344444",
+  "address": "asdfasasdfasdfsadfjlsadfjlsadfjlasdfjdfasdf"
+}

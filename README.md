@@ -16,5 +16,6 @@ docker run --name mysql -e MYSQL_ROOT_PASSWORD=root -d -p 3306:3306 mysql:latest
 docker exec -it mysql bash
 mysql -u root -p
 create database playground;
+create database playground_test;
 ```
 
