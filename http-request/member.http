@@ -6,8 +6,8 @@ Accept: application/json
 {
   "name": "김민규",
   "password": "1q2w3e4r!",
-  "email": "mingyu1",
-  "phone": "01022223333",
+  "email": "mingyu2",
+  "phone": "01022223334",
   "address": "asdfasdfasdf"
 }
 

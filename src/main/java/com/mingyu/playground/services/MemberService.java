@@ -1,5 +1,7 @@
 package com.mingyu.playground.services;
 
+import com.mingyu.playground.common.error.PlayGroundCommonException;
+import com.mingyu.playground.common.error.PlayGroundErrorCode;
 import com.mingyu.playground.dto.request.SaveMemberRequestDto;
 import com.mingyu.playground.dto.request.UpdateMemberRequestDto;
 import com.mingyu.playground.dto.response.FindMemberResponseDto;
@@ -45,7 +47,7 @@ public class MemberService {
      */
     public FindMemberResponseDto getMemberByEmail(String email) {
         Member member = memberRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("Member not found"));
+                .orElseThrow(() -> new PlayGroundCommonException(PlayGroundErrorCode.COMMON_NOT_FOUND.getCode(), PlayGroundErrorCode.COMMON_NOT_FOUND.getMessage()));
 
         return FindMemberResponseDto.builder()
                 .name(member.getName())
@@ -73,18 +75,18 @@ public class MemberService {
      */
     public void deleteMemberByEmail(String email) {
         Optional<Member> member = memberRepository.findByEmail(email);
-        memberRepository.delete(member.orElseThrow(() -> new IllegalArgumentException("Member not found")));
+        memberRepository.delete(member.orElseThrow(() -> new PlayGroundCommonException(PlayGroundErrorCode.COMMON_NOT_FOUND.getCode(), PlayGroundErrorCode.COMMON_NOT_FOUND.getMessage())));
     }
 
     /**
      * Update Member By Email
      *
-     * @param email String
+     * @param email                  String
      * @param updateMemberRequestDto UpdateMemberRequestDto
      */
     public void updateMemberByEmail(String email, UpdateMemberRequestDto updateMemberRequestDto) {
         Member member = memberRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("Member not found"));
+                .orElseThrow(() -> new PlayGroundCommonException(PlayGroundErrorCode.COMMON_NOT_FOUND.getCode(), PlayGroundErrorCode.COMMON_NOT_FOUND.getMessage()));
 
         member.update(updateMemberRequestDto);
         memberRepository.save(member);

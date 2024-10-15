@@ -1,5 +1,6 @@
 package com.mingyu.playground.controllers;
 
+import com.mingyu.playground.common.response.PlayGroundResponse;
 import com.mingyu.playground.dto.request.SaveMemberRequestDto;
 import com.mingyu.playground.dto.request.UpdateMemberRequestDto;
 import com.mingyu.playground.dto.response.FindMemberResponseDto;
@@ -35,7 +36,7 @@ public class MemberController {
     @PostMapping("/member")
     public ResponseEntity<?> saveMember(@RequestBody SaveMemberRequestDto saveMemberRequestDto) {
         memberService.saveMember(saveMemberRequestDto);
-        return ResponseEntity.ok().build();
+        return PlayGroundResponse.ok();
     }
 
 
@@ -47,8 +48,8 @@ public class MemberController {
     })
     @Description("Get All Member")
     @GetMapping("/members")
-    public ResponseEntity<List<FindMemberResponseDto>> getMembers() {
-        return ResponseEntity.ok(memberService.getMembers());
+    public ResponseEntity<?> getMembers() {
+        return PlayGroundResponse.build(memberService.getMembers());
     }
 
 
@@ -60,8 +61,8 @@ public class MemberController {
     })
     @Description("Get Member By Email")
     @GetMapping("/member/{email}")
-    public ResponseEntity<FindMemberResponseDto> getMemberByEmail(@PathVariable String email) {
-        return ResponseEntity.ok(memberService.getMemberByEmail(email));
+    public ResponseEntity<?> getMemberByEmail(@PathVariable String email) {
+        return PlayGroundResponse.build(memberService.getMemberByEmail(email));
     }
 
 
@@ -75,7 +76,7 @@ public class MemberController {
     @DeleteMapping("/member/{email}")
     public ResponseEntity<?> deleteMemberByEmail(@PathVariable String email) {
         memberService.deleteMemberByEmail(email);
-        return ResponseEntity.ok().build();
+        return PlayGroundResponse.ok();
     }
 
 
@@ -89,6 +90,6 @@ public class MemberController {
     @PutMapping("/member/{email}")
     public ResponseEntity<?> updateMemberByEmail(@PathVariable String email, @RequestBody UpdateMemberRequestDto updateMemberRequestDto) {
         memberService.updateMemberByEmail(email, updateMemberRequestDto);
-        return ResponseEntity.ok().build();
+        return PlayGroundResponse.ok();
     }
 }
