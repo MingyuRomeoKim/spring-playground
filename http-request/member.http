@@ -6,7 +6,7 @@ Accept: application/json
 {
   "name": "김민규",
   "password": "1q2w3e4r!",
-  "email": "mingyu2",
+  "email": "mingyu2@test.com",
   "phone": "01022223334",
   "address": "asdfasdfasdf"
 }
@@ -34,6 +34,6 @@ Accept: application/json
 {
   "name": "김민규수정",
   "password": "1q2w3e4r!##",
-  "phone": "0103333344444",
+  "phone": "01012345678",
   "address": "asdfasasdfasdfsadfjlsadfjlsadfjlasdfjdfasdf"
 }

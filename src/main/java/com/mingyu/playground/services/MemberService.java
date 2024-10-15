@@ -65,6 +65,15 @@ public class MemberService {
      * @param saveMemberRequestDto SaveMemberRequestDto
      */
     public void saveMember(SaveMemberRequestDto saveMemberRequestDto) {
+
+        if (memberRepository.existsByEmail(saveMemberRequestDto.getEmail())) {
+            throw new PlayGroundCommonException(PlayGroundErrorCode.COMMON_ALREADY_EXISTS.getCode(), PlayGroundErrorCode.COMMON_ALREADY_EXISTS.getMessage());
+        }
+
+        if (memberRepository.existsByPhone(saveMemberRequestDto.getPhone())) {
+            throw new PlayGroundCommonException(PlayGroundErrorCode.COMMON_ALREADY_EXISTS.getCode(), PlayGroundErrorCode.COMMON_ALREADY_EXISTS.getMessage());
+        }
+
         memberRepository.save(saveMemberRequestDto.toEntity());
     }
 

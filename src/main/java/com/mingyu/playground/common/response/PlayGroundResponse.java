@@ -2,7 +2,6 @@ package com.mingyu.playground.common.response;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;

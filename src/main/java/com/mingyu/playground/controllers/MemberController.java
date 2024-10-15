@@ -11,13 +11,15 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Description;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
+@Validated
 @Tag(name = "Member", description = "Member 관련 Controller 입니다.")
 @RequiredArgsConstructor
 @RestController
@@ -34,7 +36,7 @@ public class MemberController {
     })
     @Description("Save Member")
     @PostMapping("/member")
-    public ResponseEntity<?> saveMember(@RequestBody SaveMemberRequestDto saveMemberRequestDto) {
+    public ResponseEntity<?> saveMember(@Valid @RequestBody SaveMemberRequestDto saveMemberRequestDto) {
         memberService.saveMember(saveMemberRequestDto);
         return PlayGroundResponse.ok();
     }
@@ -57,11 +59,12 @@ public class MemberController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK",
                     content = @Content(schema = @Schema(implementation = FindMemberResponseDto.class))),
+            @ApiResponse(responseCode = "400", description = "Not Allowed Request - 올바르지 않는 요청입니다."),
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
     })
     @Description("Get Member By Email")
     @GetMapping("/member/{email}")
-    public ResponseEntity<?> getMemberByEmail(@PathVariable String email) {
+    public ResponseEntity<?> getMemberByEmail(@Email @PathVariable String email) {
         return PlayGroundResponse.build(memberService.getMemberByEmail(email));
     }
 
@@ -74,7 +77,7 @@ public class MemberController {
     })
     @Description("Delete Member By Email")
     @DeleteMapping("/member/{email}")
-    public ResponseEntity<?> deleteMemberByEmail(@PathVariable String email) {
+    public ResponseEntity<?> deleteMemberByEmail(@Email @PathVariable String email) {
         memberService.deleteMemberByEmail(email);
         return PlayGroundResponse.ok();
     }
@@ -88,7 +91,7 @@ public class MemberController {
     })
     @Description("Update Member By Email")
     @PutMapping("/member/{email}")
-    public ResponseEntity<?> updateMemberByEmail(@PathVariable String email, @RequestBody UpdateMemberRequestDto updateMemberRequestDto) {
+    public ResponseEntity<?> updateMemberByEmail(@Email @PathVariable String email, @Valid @RequestBody UpdateMemberRequestDto updateMemberRequestDto) {
         memberService.updateMemberByEmail(email, updateMemberRequestDto);
         return PlayGroundResponse.ok();
     }

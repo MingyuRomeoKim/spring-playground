@@ -4,6 +4,7 @@ public enum PlayGroundErrorCode {
 
     COMMON_FAIL("E000", "실패"),
     COMMON_NOT_FOUND("E001", "데이터를 찾을 수 없습니다."),
+    COMMON_ALREADY_EXISTS("E002", "이미 존재하는 데이터입니다."),
 
     ;
 
