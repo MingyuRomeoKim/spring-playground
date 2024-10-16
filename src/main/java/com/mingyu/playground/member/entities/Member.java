@@ -15,7 +15,6 @@ import java.util.UUID;
 @Entity
 @Table(name = "members")
 @NoArgsConstructor
-@EntityListeners(AuditingEntityListener.class)
 public class Member extends DefaultTime {
 
     @Id
@@ -46,7 +45,7 @@ public class Member extends DefaultTime {
         this.password = password;
         this.phone = phone;
         this.address = address;
-        this.role = "USER";
+        this.role = Authority.USER.getAuthority();
     }
 
     public void update(UpdateMemberRequestDto updateMemberRequestDto) {

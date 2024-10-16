@@ -13,3 +13,10 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
+jwt:
+  access:
+    secret: secret
+    expire: 86400000
+  refresh:
+    secret: secret
+    expire: 2592000000
