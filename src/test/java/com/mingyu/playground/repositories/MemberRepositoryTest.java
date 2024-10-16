@@ -1,6 +1,7 @@
 package com.mingyu.playground.repositories;
 
-import com.mingyu.playground.entities.Member;
+import com.mingyu.playground.member.entities.Member;
+import com.mingyu.playground.member.repositories.MemberRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

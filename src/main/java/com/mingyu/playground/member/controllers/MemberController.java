@@ -1,10 +1,10 @@
-package com.mingyu.playground.controllers;
+package com.mingyu.playground.member.controllers;
 
 import com.mingyu.playground.common.response.PlayGroundResponse;
-import com.mingyu.playground.dto.request.SaveMemberRequestDto;
-import com.mingyu.playground.dto.request.UpdateMemberRequestDto;
-import com.mingyu.playground.dto.response.FindMemberResponseDto;
-import com.mingyu.playground.services.MemberService;
+import com.mingyu.playground.member.dto.request.SaveMemberRequestDto;
+import com.mingyu.playground.member.dto.request.UpdateMemberRequestDto;
+import com.mingyu.playground.member.dto.response.FindMemberResponseDto;
+import com.mingyu.playground.member.services.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Member", description = "Member 관련 Controller 입니다.")
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/member")
 public class MemberController {
 
     private final MemberService memberService;
@@ -35,7 +35,7 @@ public class MemberController {
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
     })
     @Description("Save Member")
-    @PostMapping("/member")
+    @PostMapping("")
     public ResponseEntity<?> saveMember(@Valid @RequestBody SaveMemberRequestDto saveMemberRequestDto) {
         memberService.saveMember(saveMemberRequestDto);
         return PlayGroundResponse.ok();
@@ -49,7 +49,7 @@ public class MemberController {
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
     })
     @Description("Get All Member")
-    @GetMapping("/members")
+    @GetMapping("/list")
     public ResponseEntity<?> getMembers() {
         return PlayGroundResponse.build(memberService.getMembers());
     }
@@ -63,8 +63,8 @@ public class MemberController {
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
     })
     @Description("Get Member By Email")
-    @GetMapping("/member/{email}")
-    public ResponseEntity<?> getMemberByEmail(@Email @PathVariable String email) {
+    @GetMapping("/{email}")
+    public ResponseEntity<?> getMemberByEmail(@Email @PathVariable("email") String email) {
         return PlayGroundResponse.build(memberService.getMemberByEmail(email));
     }
 
@@ -76,8 +76,8 @@ public class MemberController {
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
     })
     @Description("Delete Member By Email")
-    @DeleteMapping("/member/{email}")
-    public ResponseEntity<?> deleteMemberByEmail(@Email @PathVariable String email) {
+    @DeleteMapping("/{email}")
+    public ResponseEntity<?> deleteMemberByEmail(@Email @PathVariable("email") String email) {
         memberService.deleteMemberByEmail(email);
         return PlayGroundResponse.ok();
     }
@@ -90,8 +90,8 @@ public class MemberController {
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
     })
     @Description("Update Member By Email")
-    @PutMapping("/member/{email}")
-    public ResponseEntity<?> updateMemberByEmail(@Email @PathVariable String email, @Valid @RequestBody UpdateMemberRequestDto updateMemberRequestDto) {
+    @PutMapping("/{email}")
+    public ResponseEntity<?> updateMemberByEmail(@Email @PathVariable("email") String email, @Valid @RequestBody UpdateMemberRequestDto updateMemberRequestDto) {
         memberService.updateMemberByEmail(email, updateMemberRequestDto);
         return PlayGroundResponse.ok();
     }

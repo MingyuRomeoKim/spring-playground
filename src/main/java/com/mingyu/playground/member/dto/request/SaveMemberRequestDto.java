@@ -1,19 +1,21 @@
-package com.mingyu.playground.dto.request;
+package com.mingyu.playground.member.dto.request;
 
-import com.mingyu.playground.entities.Member;
+import com.mingyu.playground.member.entities.Member;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
+import lombok.*;
+
+import java.io.Serializable;
 
 @Data
 @Getter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Schema(description = "회원 등록 요청 DTO")
-public class SaveMemberRequestDto {
+public class SaveMemberRequestDto implements Serializable {
     @Schema(description = "이름", defaultValue = "mingyu")
     @NotBlank(message = "이름을 입력해주세요.")
     private String name;

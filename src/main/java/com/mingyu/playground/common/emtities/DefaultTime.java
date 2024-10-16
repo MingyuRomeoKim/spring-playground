@@ -1,4 +1,4 @@
-package com.mingyu.playground.entities.common;
+package com.mingyu.playground.common.emtities;
 
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;

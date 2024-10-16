@@ -1,7 +1,7 @@
-package com.mingyu.playground.entities;
+package com.mingyu.playground.member.entities;
 
-import com.mingyu.playground.dto.request.UpdateMemberRequestDto;
-import com.mingyu.playground.entities.common.DefaultTime;
+import com.mingyu.playground.member.dto.request.UpdateMemberRequestDto;
+import com.mingyu.playground.common.emtities.DefaultTime;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

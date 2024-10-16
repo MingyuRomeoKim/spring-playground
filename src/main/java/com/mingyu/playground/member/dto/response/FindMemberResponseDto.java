@@ -1,4 +1,4 @@
-package com.mingyu.playground.dto.response;
+package com.mingyu.playground.member.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;

@@ -2,11 +2,12 @@ package com.mingyu.playground.services;
 
 import com.mingyu.playground.common.error.PlayGroundCommonException;
 import com.mingyu.playground.common.error.PlayGroundErrorCode;
-import com.mingyu.playground.dto.request.SaveMemberRequestDto;
-import com.mingyu.playground.dto.request.UpdateMemberRequestDto;
-import com.mingyu.playground.dto.response.FindMemberResponseDto;
-import com.mingyu.playground.entities.Member;
-import com.mingyu.playground.repositories.MemberRepository;
+import com.mingyu.playground.member.dto.request.SaveMemberRequestDto;
+import com.mingyu.playground.member.dto.request.UpdateMemberRequestDto;
+import com.mingyu.playground.member.dto.response.FindMemberResponseDto;
+import com.mingyu.playground.member.entities.Member;
+import com.mingyu.playground.member.repositories.MemberRepository;
+import com.mingyu.playground.member.services.MemberService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

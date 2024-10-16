@@ -1,6 +1,6 @@
-package com.mingyu.playground.repositories;
+package com.mingyu.playground.member.repositories;
 
-import com.mingyu.playground.entities.Member;
+import com.mingyu.playground.member.entities.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

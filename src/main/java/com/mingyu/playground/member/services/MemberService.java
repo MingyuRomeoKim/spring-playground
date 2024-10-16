@@ -1,13 +1,14 @@
-package com.mingyu.playground.services;
+package com.mingyu.playground.member.services;
 
 import com.mingyu.playground.common.error.PlayGroundCommonException;
 import com.mingyu.playground.common.error.PlayGroundErrorCode;
-import com.mingyu.playground.dto.request.SaveMemberRequestDto;
-import com.mingyu.playground.dto.request.UpdateMemberRequestDto;
-import com.mingyu.playground.dto.response.FindMemberResponseDto;
-import com.mingyu.playground.entities.Member;
-import com.mingyu.playground.repositories.MemberRepository;
+import com.mingyu.playground.member.dto.request.SaveMemberRequestDto;
+import com.mingyu.playground.member.dto.request.UpdateMemberRequestDto;
+import com.mingyu.playground.member.dto.response.FindMemberResponseDto;
+import com.mingyu.playground.member.entities.Member;
+import com.mingyu.playground.member.repositories.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.Optional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
     /**
      * Get All Members
@@ -74,6 +76,7 @@ public class MemberService {
             throw new PlayGroundCommonException(PlayGroundErrorCode.COMMON_ALREADY_EXISTS.getCode(), PlayGroundErrorCode.COMMON_ALREADY_EXISTS.getMessage());
         }
 
+        saveMemberRequestDto.setPassword(passwordEncoder.encode(saveMemberRequestDto.getPassword()));
         memberRepository.save(saveMemberRequestDto.toEntity());
     }
 
