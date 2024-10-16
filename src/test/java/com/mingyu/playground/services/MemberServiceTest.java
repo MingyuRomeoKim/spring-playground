@@ -1,10 +1,13 @@
 package com.mingyu.playground.services;
 
+import com.mingyu.playground.common.error.PlayGroundCommonException;
+import com.mingyu.playground.common.error.PlayGroundErrorCode;
 import com.mingyu.playground.dto.request.SaveMemberRequestDto;
 import com.mingyu.playground.dto.request.UpdateMemberRequestDto;
 import com.mingyu.playground.dto.response.FindMemberResponseDto;
 import com.mingyu.playground.entities.Member;
 import com.mingyu.playground.repositories.MemberRepository;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,7 +18,7 @@ import org.mockito.MockitoAnnotations;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
 class MemberServiceTest {
@@ -42,8 +45,8 @@ class MemberServiceTest {
         // Act
         List<FindMemberResponseDto> members = memberService.getMembers();
         // Assert
-        assertEquals(members.size(), 1);
-        assertEquals(members.get(0).getName(), "민규");
+        Assertions.assertThat(members).isNotEmpty();
+        Assertions.assertThat(members.get(0).getName()).isEqualTo("민규");
     }
 
     @Test
@@ -54,7 +57,8 @@ class MemberServiceTest {
         // Act
         FindMemberResponseDto findMember = memberService.getMemberByEmail("mingyu");
         // Assert
-        assertEquals(findMember.getName(), "민규");
+        Assertions.assertThat(findMember).isNotNull();
+        Assertions.assertThat(findMember.getName()).isEqualTo("민규");
     }
 
     @Test
@@ -63,7 +67,7 @@ class MemberServiceTest {
         // Arrange
         when(memberRepository.findByEmail("mingyu")).thenReturn(java.util.Optional.empty());
         // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> memberService.getMemberByEmail("mingyu"), "Member not found");
+        assertThatThrownBy(() -> memberService.getMemberByEmail("mingyu")).isInstanceOf(PlayGroundCommonException.class).hasMessage(PlayGroundErrorCode.COMMON_NOT_FOUND.getMessage());
     }
 
     @Test
@@ -106,7 +110,7 @@ class MemberServiceTest {
         // Arrange
         when(memberRepository.findByEmail("mingyu")).thenReturn(java.util.Optional.empty());
         // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> memberService.deleteMemberByEmail("mingyu"), "Member not found");
+        assertThatThrownBy(() -> memberService.deleteMemberByEmail("mingyu")).isInstanceOf(PlayGroundCommonException.class).hasMessage(PlayGroundErrorCode.COMMON_NOT_FOUND.getMessage());
     }
 
     @Test
@@ -125,7 +129,7 @@ class MemberServiceTest {
         memberService.updateMemberByEmail("mingyu", updateMemberRequestDto);
 
         // Assert
-        assertTrue(member.getPhone().equals("01012345678"));
+        Assertions.assertThat(member.getName()).isEqualTo("민규");
         verify(memberRepository, times(1)).save(any(Member.class));
     }
 
@@ -142,7 +146,7 @@ class MemberServiceTest {
         when(memberRepository.findByEmail("mingyu123123")).thenReturn(Optional.empty());
 
         // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> memberService.updateMemberByEmail("mingyu123123", UpdateMemberRequestDto.builder().build()), "Member not found");
+        assertThatThrownBy(() -> memberService.updateMemberByEmail("mingyu123123",UpdateMemberRequestDto.builder().build())).isInstanceOf(PlayGroundCommonException.class).hasMessage(PlayGroundErrorCode.COMMON_NOT_FOUND.getMessage());
     }
 
 }

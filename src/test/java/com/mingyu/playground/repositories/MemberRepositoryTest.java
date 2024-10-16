@@ -1,6 +1,8 @@
 package com.mingyu.playground.repositories;
 
 import com.mingyu.playground.entities.Member;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,11 @@ class MemberRepositoryTest {
     @Autowired
     private MemberRepository memberRepository;
 
+    @BeforeEach
+    void cleanUp() {
+        memberRepository.deleteAll();
+    }
+
     @Test
     @DisplayName("이메일로 회원 조회 성공")
     void testFindByEmail_Success() {
@@ -31,18 +38,17 @@ class MemberRepositoryTest {
 
         // Assert
         assertTrue(findMember.isPresent());
-        assertEquals(findMember.get().getEmail(), "mingyu");
+        Assertions.assertThat(findMember.get().getName()).isEqualTo("민규");
     }
 
     @Test
     @DisplayName("이메일로 회원 조회 실패")
     void testFindByEmail_Fail() {
-
         // Act
         Optional<Member> findMember = memberRepository.findByEmail("mingyu2");
 
         // Assert
-        assertTrue(findMember.isEmpty());
+        Assertions.assertThat(findMember).isEmpty();
     }
 
 }
