@@ -1,3 +1,18 @@
+### Login
+POST http://localhost:8080/api/v1/auth/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "mingyu3@test.com",
+  "password": "1Q2w3e4r!"
+}
+
+### Logout
+DELETE http://localhost:8080/api/v1/auth/logout
+Content-Type: application/json
+Accept: application/json
+
 ### Insert Member
 POST http://localhost:8080/api/v1/member
 Content-Type: application/json
@@ -5,9 +20,9 @@ Accept: application/json
 
 {
   "name": "김민규",
-  "password": "1q2w3e4r!",
-  "email": "mingyu2@test.com",
-  "phone": "01022223354",
+  "password": "1Q2w3e4r!",
+  "email": "mingyu@test.com",
+  "phone": "01022223356",
   "address": "asdfasdfasdf"
 }
 
@@ -33,7 +48,7 @@ Accept: application/json
 
 {
   "name": "김민규수정",
-  "password": "1q2w3e4r!##",
+  "password": "1q2w3E4r!##",
   "phone": "01012345678",
   "address": "asdfasasdfasdfsadfjlsadfjlsadfjlasdfjdfasdf"
 }

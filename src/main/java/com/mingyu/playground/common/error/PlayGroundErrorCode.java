@@ -13,6 +13,10 @@ public enum PlayGroundErrorCode {
     JWT_AUTHENTICATION_FAILED("E103", "인증에 실패하였습니다."),
     JWT_UNSUPPORTED_ERROR("E104", "지원하지 않는 토큰입니다."),
     JWT_TOKEN_NOT_FOUND("E105", "토큰이 존재하지 않습니다."),
+
+    // Auth
+    AUTH_INVALID("E201", "유효하지 않은 사용자 정보입니다."),
+    AUTH_PASSWORD_MISMATCH("E202", "비밀번호가 일치하지 않습니다."),
     ;
 
     private final String code;

@@ -1,0 +1,19 @@
+### 로그인
+POST http://localhost:8080/api/v1/auth/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "mingyu3@test.com",
+  "password": "1Q2w3e4r!"
+}
+
+> {%
+    client.global.set("auth_token", response.body.result.accessToken);
+%}
+
+### 로그아웃
+DELETE http://localhost:8080/api/v1/auth/logout
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{auth_token}}
