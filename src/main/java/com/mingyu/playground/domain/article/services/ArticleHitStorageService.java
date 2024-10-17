@@ -26,13 +26,13 @@ public class ArticleHitStorageService {
     private final ArticleHitRepository articleHitRepository;
 
     @Transactional
-    public void batchUpdateHitCounts(Map<String, Map<String, String>> hitCountsFromRedis) {
+    public void batchUpdateHitCounts(List<ArticleHit> hitCountsFromRedis) {
         List<ArticleHitStorage> articleHitStorages = new ArrayList<>();
-        for (Map.Entry<String, Map<String, String>> entry : hitCountsFromRedis.entrySet()) {
-            String articleId = entry.getKey();
-            Map<String, String> counts = entry.getValue();
-            int hitCount = Integer.parseInt(counts.get("hitCount"));
-            int mobileHitCount = Integer.parseInt(counts.get("mobileHitCount"));
+
+        for (ArticleHit articleHit: hitCountsFromRedis) {
+            String articleId = articleHit.getArticleId();
+            int hitCount = articleHit.getHitCount();
+            int mobileHitCount = articleHit.getMobileHitCount();
 
             ArticleHitStorage articleHitStorage = articleHitStorageRepository.findById(articleId)
                     .orElse(new ArticleHitStorage(articleId, 0, 0));
@@ -42,47 +42,29 @@ public class ArticleHitStorageService {
 
             articleHitStorages.add(articleHitStorage);
         }
+
         articleHitStorageRepository.saveAll(articleHitStorages);
     }
 
     public void updateHitStorage() {
-        List<String> articleIds = articleHitRepository.getMembers();
-        Map<String, Map<String, String>> hitCountsFromRedis = new HashMap<>();
+        // Redis에서 모든 히트 정보 조회
+        Iterable<ArticleHit> articleHits = articleHitRepository.findAll();
 
-
-        if (articleIds == null) {
-            return;
-        }
-
-        for (String articleId : articleIds) {
-            Map<String, Object> allHitCounts = articleHitRepository.getAndDeleteAllHitCount(articleId);
-
-            if (allHitCounts.isEmpty()) {
-                continue;
+        List<ArticleHit> articleHitList = new ArrayList<>();
+        articleHits.forEach(articleHit -> {
+            if (articleHit != null) {
+                articleHitList.add(articleHit);
             }
+        });
 
-            Map<String, String> counts = new HashMap<>();
-            counts.put("hitCount", allHitCounts.get("hitCount").toString());
-            counts.put("mobileHitCount", allHitCounts.get("mobileHitCount").toString());
-
-            hitCountsFromRedis.put(articleId, counts);
+        if (articleHitList.isEmpty()) {
+            return ;
         }
 
+        // 배치 업데이트
+        batchUpdateHitCounts(articleHitList);
 
-
-         // [방법1] 커스텀 쿼리 사용 업데이트
-         // 이 방법이 맞나?? 일괄로 increment 시킬 방법이 있을까??
-         // 아냐. 이 방법은 articleId 별로 hitCount를 증가시키는 방법이 맞지만 반복하여 수행해서 일괄처리 방식이 아니야.
-        /**
-         for (String articleId : hitCountsFromRedis.keySet()) {
-         articleHitStorageRepository.incrementHitCount(articleId, Integer.parseInt(hitCountsFromRedis.get(articleId).get("hitCount")));
-         articleHitStorageRepository.incrementMobileHitCount(articleId, Integer.parseInt(hitCountsFromRedis.get(articleId).get("mobileHitCount")));
-         }
-         */
-
-        // [방법2] JDBC를 이용한 배치 업데이트
-        if (!hitCountsFromRedis.isEmpty()) {
-            batchUpdateHitCounts(hitCountsFromRedis);
-        }
+        // 동시성을 고려한 조회된 정보에 한한 Redis 초기화
+        articleHitRepository.deleteAll(articleHitList);
     }
 }
