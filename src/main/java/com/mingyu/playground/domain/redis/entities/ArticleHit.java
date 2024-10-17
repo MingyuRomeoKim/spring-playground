@@ -4,16 +4,16 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
-@RedisHash(value = "viewCount", timeToLive = 300L)
+
 @Getter
+@RedisHash(value = "article-hit", timeToLive = 300L)
 @Builder
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class ViewCount {
+public class ArticleHit {
     @Id
-    private String userName;
-    private String verifyCode;
+    private String articleId;
+    private int hitCount;
+    private int mobileHitCount;
 }
-
-

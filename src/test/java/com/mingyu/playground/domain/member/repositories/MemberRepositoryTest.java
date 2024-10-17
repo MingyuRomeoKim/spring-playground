@@ -1,4 +1,4 @@
-package com.mingyu.playground.repositories;
+package com.mingyu.playground.domain.member.repositories;
 
 import com.mingyu.playground.domain.member.entities.Member;
 import com.mingyu.playground.domain.member.repositories.MemberRepository;

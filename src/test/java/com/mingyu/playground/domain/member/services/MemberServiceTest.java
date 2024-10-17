@@ -1,4 +1,4 @@
-package com.mingyu.playground.services;
+package com.mingyu.playground.domain.member.services;
 
 import com.mingyu.playground.common.error.PlayGroundCommonException;
 import com.mingyu.playground.common.error.PlayGroundErrorCode;

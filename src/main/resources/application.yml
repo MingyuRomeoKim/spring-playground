@@ -1,5 +1,7 @@
 # Spring Boot Application Configuration
 spring:
+  main:
+    allow-bean-definition-overriding: true
   application:
     name: playground
   datasource:

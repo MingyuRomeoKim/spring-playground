@@ -11,7 +11,10 @@ import org.springframework.cache.interceptor.CacheErrorHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.data.redis.cache.BatchStrategies;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
+import org.springframework.data.redis.cache.RedisCacheManager;
+import org.springframework.data.redis.cache.RedisCacheWriter;
 import org.springframework.data.redis.connection.RedisClusterConfiguration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
@@ -32,23 +35,27 @@ import java.util.Map;
 @EnableCaching
 @EnableRedisRepositories
 public class RedisConfig extends CachingConfigurerSupport {
-    @Value("${redis-cache.host1}")
+    @Value("${redis.host1}")
     private String host1;
-    @Value("${redis-cache.host2}")
+    @Value("${redis.host2}")
     private String host2;
-    @Value("${redis-cache.host3}")
+    @Value("${redis.host3}")
     private String host3;
-    @Value("${redis-cache.port1}")
+    @Value("${redis.port1}")
     private int port1;
-    @Value("${redis-cache.port2}")
+    @Value("${redis.port2}")
     private int port2;
-    @Value("${redis-cache.port3}")
+    @Value("${redis.port3}")
     private int port3;
-    @Value("${redis-cache.timeout.socket}")
+    @Value("${redis.timeout.socket}")
     private int timeoutSocket;
-    @Value("${redis-cache.timeout.client}")
+    @Value("${redis.timeout.client}")
     private int timeoutClient;
 
+    /**
+     * local 환경에서 사용할 redis connection factory - 단일 구성
+     * @return
+     */
     @Bean
     @Profile("local")
     public RedisConnectionFactory redisConnectionFactoryLocal() {
@@ -58,6 +65,10 @@ public class RedisConfig extends CachingConfigurerSupport {
         return new LettuceConnectionFactory(redisStandaloneConfiguration);
     }
 
+    /**
+     * prod 환경에서 사용할 redis connection factory - 클러스터 구성
+     * @return
+     */
     @Bean
     @Profile("prod")
     public RedisConnectionFactory redisConnectionFactory() {
@@ -78,6 +89,17 @@ public class RedisConfig extends CachingConfigurerSupport {
         return new LettuceConnectionFactory(redisClusterConfiguration, clientConfig);
     }
 
+    @Bean
+    public RedisCacheManager redisCacheManager(RedisConnectionFactory redisConnectionFactory) {
+        RedisCacheWriter redisCacheWriter = RedisCacheWriter.lockingRedisCacheWriter(redisConnectionFactory, BatchStrategies.scan(1000));
+        RedisCacheManager redisCacheManager = RedisCacheManager.builder(redisCacheWriter)
+                .cacheDefaults(defaultCacheConfig())
+                .withInitialCacheConfigurations(customCacheConfig())
+                .build();
+        redisCacheManager.setTransactionAware(false);
+        return redisCacheManager;
+    }
+
     /**
      * 캐시 공통 설정
      * @return 레디스 캐시 설정
@@ -95,14 +117,7 @@ public class RedisConfig extends CachingConfigurerSupport {
      */
     private Map<String, RedisCacheConfiguration> customCacheConfig() {
         Map<String, RedisCacheConfiguration> cacheConfigurations = new HashMap<>();
-        cacheConfigurations.put("mtnw.userTicket", defaultCacheConfig().entryTtl(Duration.ofSeconds(120)));
-        cacheConfigurations.put("mtnw.youtubeStreamingList", defaultCacheConfig().entryTtl(Duration.ofSeconds(30)));
-        cacheConfigurations.put("zeus-api.advisorUserInfos", defaultCacheConfig().entryTtl(Duration.ofSeconds(60)));
-        cacheConfigurations.put("zeus-api.adminMessages", defaultCacheConfig().entryTtl(Duration.ofSeconds(300)));
-        cacheConfigurations.put("zeus-api.advisorMessages", defaultCacheConfig().entryTtl(Duration.ofSeconds(300)));
-
         /* cacheConfigurations.put("keygroup.keyname", defaultCacheConfig().entryTtl(Duration.ofSeconds(600))); */
-
         return cacheConfigurations;
     }
 
@@ -128,7 +143,11 @@ public class RedisConfig extends CachingConfigurerSupport {
         RedisTemplate<?, ?> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactoryLocal());   //connection
         redisTemplate.setKeySerializer(new StringRedisSerializer());    // key
+        redisTemplate.setHashKeySerializer(new StringRedisSerializer()); // hash key
+
         redisTemplate.setValueSerializer(new StringRedisSerializer());  // value
+        redisTemplate.setHashValueSerializer(new StringRedisSerializer()); // hash value
         return redisTemplate;
     }
+
 }
