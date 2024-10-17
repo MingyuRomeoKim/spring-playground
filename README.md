@@ -37,13 +37,13 @@ docker run -d --name redis -p 6379:6379 redis:latest redis-server --requirepass 
 ```
 ### 2.2.2 redis cluster 생성
 ```shell
-docker run -it --rm --network redis-cluster redis:latest redis-cli --cluster create \
-172.28.0.1:7001 \
-172.28.0.2:7002 \
-172.28.0.3:7003 \
-172.28.0.4:7004 \
-172.28.0.5:7005 \
-172.28.0.6:7006 \
+docker run -it --rm --network redis-cluster_redis-cluster redis:latest redis-cli --cluster create \
+172.28.0.11:7001 \
+172.28.0.12:7002 \
+172.28.0.13:7003 \
+172.28.0.14:7004 \
+172.28.0.15:7005 \
+172.28.0.16:7006 \
 --cluster-replicas 1
 ```
 ### 2.2.3 cluster 구성 확인

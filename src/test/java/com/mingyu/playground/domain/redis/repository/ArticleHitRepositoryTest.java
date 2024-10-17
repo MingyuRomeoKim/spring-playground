@@ -6,10 +6,14 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
@@ -21,6 +25,7 @@ import java.util.stream.IntStream;
 class ArticleHitRepositoryTest {
 
     private static final String ARTICLE_ID = "20240102";
+    private static final Logger log = LoggerFactory.getLogger(ArticleHitRepositoryTest.class);
 
     @Autowired
     private ArticleHitRepository articleHitRepository;
@@ -46,7 +51,7 @@ class ArticleHitRepositoryTest {
             articleHitRepository.save(newArticleHit);
         }
 
-        int updateHitCount = articleHitRepository.incrementHitCount(articleId, hits);
+        int updateHitCount = articleHitRepository.incrementPcHitCount(articleId, hits);
 
         // Then
         ArticleHit updateArticleHit = articleHitRepository.findById(articleId).orElseThrow();
@@ -69,11 +74,10 @@ class ArticleHitRepositoryTest {
                     .build();
             articleHitRepository.save(newArticleHit);
         }
-        int updateHitCount = articleHitRepository.incrementMobileHitCount(articleId, hits);
 
         // Then
-        ArticleHit updateArticleHit = articleHitRepository.findById(articleId).orElseThrow();
-        Assertions.assertThat(hits).isEqualTo(updateArticleHit.getMobileHitCount());
+        int updateHitCount = articleHitRepository.incrementMobileHitCount(articleId, hits);
+        Assertions.assertThat(hits).isEqualTo(updateHitCount);
     }
 
     @Test
@@ -85,22 +89,23 @@ class ArticleHitRepositoryTest {
         int incrementPerThread = 1;
 
         // 초기값 저장
-        ArticleHit newArticleHit = ArticleHit.builder()
-                .articleId(articleId)
-                .hitCount(0)
-                .mobileHitCount(0)
-                .build();
-        articleHitRepository.save(newArticleHit);
+        Optional<ArticleHit> articleHit = articleHitRepository.findById(articleId);
+        if (articleHit.isEmpty()) {
+            ArticleHit newArticleHit = ArticleHit.builder()
+                    .articleId(articleId)
+                    .build();
+            articleHitRepository.save(newArticleHit);
+        }
 
         // 스레드 풀 생성
-        ExecutorService executorService = Executors.newFixedThreadPool(1000);
+        ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads / 10);
         CountDownLatch latch = new CountDownLatch(numberOfThreads);
 
         // When
         IntStream.range(0, numberOfThreads).forEach(i -> {
             executorService.execute(() -> {
                 try {
-                    articleHitRepository.incrementHitCount(articleId, incrementPerThread);
+                    articleHitRepository.incrementPcHitCount(articleId, incrementPerThread);
                 } finally {
                     latch.countDown();
                 }
@@ -121,19 +126,20 @@ class ArticleHitRepositoryTest {
     void incrementMobileHitCountConcurrently() throws InterruptedException {
         // Given
         String articleId = ARTICLE_ID;
-        int numberOfThreads = 100;
+        int numberOfThreads = 10000;
         int incrementPerThread = 1;
 
         // 초기값 저장
-        ArticleHit newArticleHit = ArticleHit.builder()
-                .articleId(articleId)
-                .hitCount(0)
-                .mobileHitCount(0)
-                .build();
-        articleHitRepository.save(newArticleHit);
+        Optional<ArticleHit> articleHit = articleHitRepository.findById(articleId);
+        if (articleHit.isEmpty()) {
+            ArticleHit newArticleHit = ArticleHit.builder()
+                    .articleId(articleId)
+                    .build();
+            articleHitRepository.save(newArticleHit);
+        }
 
         // 스레드 풀 생성
-        ExecutorService executorService = Executors.newFixedThreadPool(10);
+        ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads / 10);
         CountDownLatch latch = new CountDownLatch(numberOfThreads);
 
         // When
@@ -154,5 +160,39 @@ class ArticleHitRepositoryTest {
         // Then
         ArticleHit updateArticleHit = articleHitRepository.findById(articleId).orElseThrow();
         Assertions.assertThat(updateArticleHit.getMobileHitCount()).isEqualTo(numberOfThreads * incrementPerThread);
+    }
+
+    @Test
+    @DisplayName("Redis Sets 조회")
+    void getMembers() {
+        // When
+        List<String> members = articleHitRepository.getMembers();
+
+        // Then
+        log.info("members: {}", members);
+        Assertions.assertThat(members).isNotNull();
+    }
+
+    @Test
+    @DisplayName("pc & mobile view count 조회 및 삭제")
+    void getAndDeleteAllHitCount() {
+        // Given
+        String articleId = ARTICLE_ID;
+
+        // When
+        Map<String,Object> hitCounts = articleHitRepository.getAndDeleteAllHitCount(articleId);
+
+        // Then
+        if (hitCounts.isEmpty()) {
+            Assertions.assertThatComparable(hitCounts.size()).isEqualTo(0);
+        } else {
+            String hitCount = hitCounts.get("hitCount").toString();
+            String mobileHitCount = hitCounts.get("mobileHitCount").toString();
+
+            log.info("hitCount: {}", hitCount);
+            log.info("mobileHitCount: {}", mobileHitCount);
+
+            Assertions.assertThat(hitCount).isNotNull();
+        }
     }
 }

@@ -1,7 +1,7 @@
 version: '3'
 services:
   redis-node-1:
-    image: redis:6.2
+    image: redis:latest
     command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
     volumes:
       - ./redis-node-1/redis.conf:/usr/local/etc/redis/redis.conf
@@ -10,10 +10,10 @@ services:
       - "17001:17001"
     networks:
       redis-cluster:
-        ipv4_address: 172.28.0.1
+        ipv4_address: 172.28.0.11
 
   redis-node-2:
-    image: redis:6.2
+    image: redis:latest
     command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
     volumes:
       - ./redis-node-2/redis.conf:/usr/local/etc/redis/redis.conf
@@ -22,10 +22,10 @@ services:
       - "17002:17002"
     networks:
       redis-cluster:
-        ipv4_address: 172.28.0.2
+        ipv4_address: 172.28.0.12
 
   redis-node-3:
-    image: redis:6.2
+    image: redis:latest
     command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
     volumes:
       - ./redis-node-3/redis.conf:/usr/local/etc/redis/redis.conf
@@ -34,10 +34,10 @@ services:
       - "17003:17003"
     networks:
       redis-cluster:
-        ipv4_address: 172.28.0.3
+        ipv4_address: 172.28.0.13
 
   redis-node-4:
-    image: redis:6.2
+    image: redis:latest
     command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
     volumes:
       - ./redis-node-4/redis.conf:/usr/local/etc/redis/redis.conf
@@ -46,10 +46,10 @@ services:
       - "17004:17004"
     networks:
       redis-cluster:
-        ipv4_address: 172.28.0.4
+        ipv4_address: 172.28.0.14
 
   redis-node-5:
-    image: redis:6.2
+    image: redis:latest
     command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
     volumes:
       - ./redis-node-5/redis.conf:/usr/local/etc/redis/redis.conf
@@ -58,10 +58,10 @@ services:
       - "17005:17005"
     networks:
       redis-cluster:
-        ipv4_address: 172.28.0.5
+        ipv4_address: 172.28.0.15
 
   redis-node-6:
-    image: redis:6.2
+    image: redis:latest
     command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
     volumes:
       - ./redis-node-6/redis.conf:/usr/local/etc/redis/redis.conf
@@ -70,7 +70,7 @@ services:
       - "17006:17006"
     networks:
       redis-cluster:
-        ipv4_address: 172.28.0.6
+        ipv4_address: 172.28.0.16
 
 networks:
   redis-cluster:
