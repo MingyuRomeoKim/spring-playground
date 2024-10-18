@@ -5,6 +5,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
 
+@Setter
 @Getter
 @RedisHash(value = "article-hit", timeToLive = 300L)
 @Builder
