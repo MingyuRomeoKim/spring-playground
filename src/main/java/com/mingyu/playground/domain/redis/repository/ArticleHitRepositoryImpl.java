@@ -82,26 +82,26 @@ public class ArticleHitRepositoryImpl implements ArticleHitRepositoryCustom {
     @Override
     public List<ArticleHit> getAndDeleteAllArticleHits() {
         // Lua 스크립트 정의
-        String luaScript =
-                "local keys = redis.call('keys', ARGV[1])\n" +
-                        "local result = {}\n" +
-                        "for i, key in ipairs(keys) do\n" +
-                        "    local data = redis.call('hgetall', key)\n" +
-                        "    table.insert(result, key)\n" +
-                        "    for j, value in ipairs(data) do\n" +
-                        "        table.insert(result, value)\n" +
-                        "    end\n" +
-                        "end\n" +
-                        "if #keys > 0 then\n" +
-                        "    redis.call('del', unpack(keys))\n" +
-                        "end\n" +
-                        "return result";
+        String luaScript = "local article_ids = redis.call('smembers', KEYS[1])\n" +
+                "local result = {}\n" +
+                "for _, article_id in ipairs(article_ids) do\n" +
+                "    local key = 'article-hit:' .. article_id\n" +
+                "    local data = redis.call('hgetall', key)\n" +
+                "    table.insert(result, key)\n" +
+                "    for i=1,#data,2 do\n" +
+                "        table.insert(result, data[i])\n" +
+                "        table.insert(result, data[i+1])\n" +
+                "    end\n" +
+                "    redis.call('del', key)\n" +
+                "end\n" +
+                "redis.call('del', KEYS[1])\n" +
+                "return result";
 
         // RedisScript 생성
         RedisScript<List> script = RedisScript.of(luaScript, List.class);
 
-        // 스크립트 실행
-        List<Object> result = redisTemplate.execute(script, Collections.emptyList(), KEY_PATTERN);
+        // 스크립트 실행 (KEYS에 'article-hit' 전달)
+        List<Object> result = redisTemplate.execute(script, Collections.singletonList("article-hit"));
 
         // 결과 파싱
         List<ArticleHit> articleHits = new ArrayList<>();
@@ -110,16 +110,23 @@ public class ArticleHitRepositoryImpl implements ArticleHitRepositoryCustom {
             int index = 0;
 
             while (index < result.size()) {
+                // 키 가져오기
                 String key = result.get(index++).toString();
+
                 Map<String, String> dataMap = new HashMap<>();
 
-                while (index < result.size() && !result.get(index).toString().startsWith(KEY_PREFIX + ":")) {
+                // 다음 항목이 키이거나 리스트의 끝이 아닐 때까지 field-value를 가져옴
+                while (index < result.size() && !result.get(index).toString().startsWith("article-hit:")) {
                     String field = result.get(index++).toString();
                     String value = result.get(index++).toString();
                     dataMap.put(field, value);
                 }
 
-                ArticleHit articleHit = mapToArticleHit(key, dataMap);
+                // 키에서 articleId 추출
+                String articleId = key.substring("article-hit:".length());
+
+                // ArticleHit 객체 생성
+                ArticleHit articleHit = mapToArticleHit(articleId, dataMap);
                 articleHits.add(articleHit);
             }
         }
@@ -127,14 +134,13 @@ public class ArticleHitRepositoryImpl implements ArticleHitRepositoryCustom {
         return articleHits;
     }
 
-    private ArticleHit mapToArticleHit(String key, Map<String, String> dataMap) {
-
-        String articleId = key.replace(KEY_PREFIX + ":", "");
+    private ArticleHit mapToArticleHit(String articleId, Map<String, String> dataMap) {
         int hitCount = Integer.parseInt(dataMap.getOrDefault("hitCount", "0"));
         int mobileHitCount = Integer.parseInt(dataMap.getOrDefault("mobileHitCount", "0"));
 
         return new ArticleHit(articleId, hitCount, mobileHitCount);
     }
+
 
     /**
      * 특정 articleId에 저장된 모든 hitCount를 가져오고 삭제한다.

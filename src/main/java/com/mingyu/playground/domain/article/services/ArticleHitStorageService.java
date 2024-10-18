@@ -44,15 +44,16 @@ public class ArticleHitStorageService {
 
     public void updateHitStorage() {
 
+        /**
+         * findAllBy 후 deleteAll을 통한 초기화 사이에 동시성 문제 발생..
+
         //Redis에서 모든 히트 정보 조회
         List<ArticleHit> articleHits = articleHitRepository.findAllBy();
         //동시성을 고려한 조회된 정보에 한한 Redis 초기화
         articleHitRepository.deleteAll(articleHits);
-
-        /**
-         * Lua script를 이용한 Redis 초기화.. TODO:: 오류 해결 및 재구현
          */
-        //List<ArticleHit> articleHits = articleHitRepository.getAndDeleteAllArticleHits();
+
+        List<ArticleHit> articleHits = articleHitRepository.getAndDeleteAllArticleHits();
 
         if (articleHits.isEmpty()) {
             return;

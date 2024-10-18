@@ -5,18 +5,15 @@ import com.mingyu.playground.domain.article.repositories.ArticleHitStorageReposi
 import com.mingyu.playground.domain.redis.entities.ArticleHit;
 import com.mingyu.playground.domain.redis.repository.ArticleHitRepository;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.platform.commons.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
