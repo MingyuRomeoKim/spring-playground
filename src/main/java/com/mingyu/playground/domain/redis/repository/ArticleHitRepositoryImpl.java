@@ -17,7 +17,7 @@ public class ArticleHitRepositoryImpl implements ArticleHitRepositoryCustom {
     private RedisTemplate<String, Object> redisTemplate;
 
     private static final String KEY_PREFIX = "article-hit";
-    private static final String KEY_PATTERN = KEY_PREFIX + ":*";
+    private static final String KEY_PATTERN = KEY_PREFIX + ":";
 
     /**
      * hash table 특정 articleId에 저장된 hitCount를 증가시킨다.
@@ -44,7 +44,7 @@ public class ArticleHitRepositoryImpl implements ArticleHitRepositoryCustom {
      */
     @Override
     public int incrementMobileHitCount(String articleId, Integer hits) {
-        String key = KEY_PREFIX + ":" + articleId;
+        String key = KEY_PATTERN + articleId;
         Long updatedValue = redisTemplate.opsForHash().increment(key, "mobileHitCount", hits);
         redisTemplate.opsForSet().add(KEY_PREFIX, articleId);
 
@@ -58,9 +58,8 @@ public class ArticleHitRepositoryImpl implements ArticleHitRepositoryCustom {
      */
     @Override
     public List<String> getMembers() {
-        String key = KEY_PREFIX;
 
-        Set<Object> members = redisTemplate.opsForSet().members(key);
+        Set<Object> members = redisTemplate.opsForSet().members(KEY_PREFIX);
 
         if (members != null) {
             List<String> returnMembers = new ArrayList<>();
@@ -85,7 +84,7 @@ public class ArticleHitRepositoryImpl implements ArticleHitRepositoryCustom {
         String luaScript = "local article_ids = redis.call('smembers', KEYS[1])\n" +
                 "local result = {}\n" +
                 "for _, article_id in ipairs(article_ids) do\n" +
-                "    local key = 'article-hit:' .. article_id\n" +
+                "    local key = '" + KEY_PATTERN + "' .. article_id\n" +
                 "    local data = redis.call('hgetall', key)\n" +
                 "    table.insert(result, key)\n" +
                 "    for i=1,#data,2 do\n" +
@@ -101,7 +100,7 @@ public class ArticleHitRepositoryImpl implements ArticleHitRepositoryCustom {
         RedisScript<List> script = RedisScript.of(luaScript, List.class);
 
         // 스크립트 실행 (KEYS에 'article-hit' 전달)
-        List<Object> result = redisTemplate.execute(script, Collections.singletonList("article-hit"));
+        List<Object> result = redisTemplate.execute(script, Collections.singletonList(KEY_PREFIX));
 
         // 결과 파싱
         List<ArticleHit> articleHits = new ArrayList<>();
@@ -116,14 +115,14 @@ public class ArticleHitRepositoryImpl implements ArticleHitRepositoryCustom {
                 Map<String, String> dataMap = new HashMap<>();
 
                 // 다음 항목이 키이거나 리스트의 끝이 아닐 때까지 field-value를 가져옴
-                while (index < result.size() && !result.get(index).toString().startsWith("article-hit:")) {
+                while (index < result.size() && !result.get(index).toString().startsWith(KEY_PATTERN)) {
                     String field = result.get(index++).toString();
                     String value = result.get(index++).toString();
                     dataMap.put(field, value);
                 }
 
                 // 키에서 articleId 추출
-                String articleId = key.substring("article-hit:".length());
+                String articleId = key.substring(KEY_PATTERN.length());
 
                 // ArticleHit 객체 생성
                 ArticleHit articleHit = mapToArticleHit(articleId, dataMap);
@@ -150,7 +149,7 @@ public class ArticleHitRepositoryImpl implements ArticleHitRepositoryCustom {
      */
     @Override
     public Map<String, Object> getAndDeleteAllHitCount(String articleId) {
-        String key = KEY_PREFIX + ":" + articleId;
+        String key = KEY_PATTERN + articleId;
 
         // Lua 스크립트 정의
         String luaScript =

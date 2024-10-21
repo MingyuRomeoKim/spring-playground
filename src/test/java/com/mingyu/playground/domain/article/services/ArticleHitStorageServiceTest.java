@@ -78,9 +78,6 @@ class ArticleHitStorageServiceTest {
         log.info("articleHitList: {}", articleHitList);
         Assertions.assertThat(articleHitList).size().isNotEqualTo(0);
         Assertions.assertThat(articleHitList).size().isGreaterThanOrEqualTo(loopCount);
-
-        // 이걸 조회수가 몰릴 때 테스트 하고싶어.
-        articleHitStorageService.updateHitStorage();
     }
 
 
@@ -108,7 +105,7 @@ class ArticleHitStorageServiceTest {
                 // 조회수가 몰리는 동안 주기적으로 updateHitStorage 실행
                 while (isRunning.get()) {
                     articleHitStorageService.updateHitStorage();
-                    Thread.sleep(500); // 500ms마다 실행
+                    Thread.sleep(100); // 100ms마다 실행
                 }
                 // 마지막으로 남은 데이터 처리
                 articleHitStorageService.updateHitStorage();
