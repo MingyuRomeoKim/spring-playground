@@ -65,12 +65,12 @@ Do you want to proceed with the proposed cluster configuration? (type 'yes' to a
 ```
 ### 2.2.4 cluster 상태 확인하기
 ```shell
-docker run -it --rm --network redis-cluster redis:latest redis-cli -c -h 172.28.0.1 -p 7001 cluster info
+docker run -it --rm --network redis-cluster_redis-cluster redis:latest redis-cli -c -h 172.28.0.1 -p 7001 cluster info
 ```
 ### 2.2.5 cluster 테스트
 redis 클러스터에 키를 설정하고 가져와서 정상 작동 여부 테스트하기.
 ```shell
-docker run -it --rm --network redis-cluster redis:latest redis-cli -c -h 172.28.0.1 -p 7001
+docker run -it --rm --network redis-cluster_redis-cluster redis:latest redis-cli -c -h 172.28.0.1 -p 7001
 ```
 Redis cli에 접속되면 아래 명령어로 값 설정 및 가져오기 테스트
 ```redis
