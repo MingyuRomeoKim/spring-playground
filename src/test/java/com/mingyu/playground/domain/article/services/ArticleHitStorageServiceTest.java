@@ -53,14 +53,6 @@ class ArticleHitStorageServiceTest {
             int numberOfThreads = 100;
             int incrementPerThread = 1;
 
-            Optional<ArticleHit> articleHit = articleHitRepository.findById(articleId);
-            if (articleHit.isEmpty()) {
-                ArticleHit newArticleHit = ArticleHit.builder()
-                        .articleId(articleId)
-                        .build();
-                articleHitRepository.save(newArticleHit);
-            }
-
             // 스레드 풀 생성
             ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads / 10);
             CountDownLatch latch = new CountDownLatch(numberOfThreads);

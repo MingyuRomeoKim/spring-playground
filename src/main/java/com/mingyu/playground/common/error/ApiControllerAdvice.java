@@ -35,8 +35,20 @@ public class ApiControllerAdvice {
     @ExceptionHandler({MethodArgumentNotValidException.class, BindException.class})
     public ResponseEntity<?> handleValidationExceptions(MethodArgumentNotValidException ex){
         Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getAllErrors()
-                .forEach(c -> errors.put(((FieldError) c).getField(), c.getDefaultMessage()));
+        // 모든 에러를 처리
+        ex.getBindingResult().getAllErrors().forEach(error -> {
+            // FieldError인 경우
+            if (error instanceof FieldError) {
+                String fieldName = ((FieldError) error).getField();
+                String errorMessage = error.getDefaultMessage();
+                errors.put(fieldName, errorMessage);
+            } else {
+                // ObjectError인 경우 (예: PasswordMatches)
+                String objectName = error.getObjectName();
+                String errorMessage = error.getDefaultMessage();
+                errors.put(objectName, errorMessage);
+            }
+        });
 
         ApiResponseMessage apiResponseMessage = new ApiResponseMessage();
         apiResponseMessage.setStatus("FAIL");

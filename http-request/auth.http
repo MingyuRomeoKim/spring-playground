@@ -4,7 +4,7 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "email": "mingyu3@test.com",
+  "email": "mingyu-gest@test.com",
   "password": "1Q2w3e4r!"
 }
 
@@ -17,3 +17,18 @@ DELETE http://localhost:8080/api/v1/auth/logout
 Content-Type: application/json
 Accept: application/json
 Authorization: Bearer {{auth_token}}
+
+### 회원가입
+POST http://localhost:8080/api/v1/auth/signup
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "name": "김민규",
+  "password": "1Q2w3e4r!",
+  "passwordCheck": "1Q2w3e4r33!",
+  "email": "mingyu-gest@test.com",
+  "phone": "01011223344",
+  "address": "asdfasdfasdf"
+}

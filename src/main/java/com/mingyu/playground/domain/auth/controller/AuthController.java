@@ -2,11 +2,11 @@ package com.mingyu.playground.domain.auth.controller;
 
 import com.mingyu.playground.common.response.PlayGroundResponse;
 import com.mingyu.playground.domain.auth.dto.request.AuthLoginRequestDto;
+import com.mingyu.playground.domain.auth.dto.request.AuthSignUpRequestDto;
 import com.mingyu.playground.domain.auth.dto.response.AuthLoginResponseDto;
 import com.mingyu.playground.domain.auth.service.AuthService;
 import com.mingyu.playground.domain.jwt.service.TokenService;
 import com.mingyu.playground.domain.jwt.util.JwtTokenizer;
-import com.mingyu.playground.domain.member.dto.response.FindMemberResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -36,7 +36,7 @@ public class AuthController {
     @Operation(summary = "로그인", description = "회원 아이디와 비밀번호를 가지고 로그인 후 access 토큰을 발급합니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK",
-                    content = @Content(schema = @Schema(implementation = FindMemberResponseDto.class))),
+                    content = @Content(schema = @Schema(implementation = PlayGroundResponse.class))),
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
     })
     @Description("Login")
@@ -61,6 +61,12 @@ public class AuthController {
         return PlayGroundResponse.build(authLoginResponseDto);
     }
 
+    @Operation(summary = "로그아웃", description = "로그아웃 처리를 합니다. access token과 refresh token을 삭제합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
+    })
+    @Description("Logout")
     @DeleteMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
         String accessToken = null;
@@ -86,4 +92,17 @@ public class AuthController {
         tokenService.deleteByAccessToken(accessToken);
         return PlayGroundResponse.ok();
     }
+
+    @Operation(summary = "회원가입", description = "회원가입을 진행합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK",
+                    content = @Content(schema = @Schema(implementation = PlayGroundResponse.class))),
+            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
+    })
+    @PostMapping("/signup")
+    public ResponseEntity<?> signup(@Valid @RequestBody AuthSignUpRequestDto authSignUpRequestDto) {
+        authService.signup(authSignUpRequestDto);
+        return PlayGroundResponse.ok();
+    }
+
 }

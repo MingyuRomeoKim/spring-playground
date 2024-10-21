@@ -3,10 +3,12 @@ package com.mingyu.playground.domain.auth.service;
 import com.mingyu.playground.common.error.PlayGroundCommonException;
 import com.mingyu.playground.common.error.PlayGroundErrorCode;
 import com.mingyu.playground.domain.auth.dto.request.AuthLoginRequestDto;
+import com.mingyu.playground.domain.auth.dto.request.AuthSignUpRequestDto;
 import com.mingyu.playground.domain.auth.dto.response.AuthLoginResponseDto;
 import com.mingyu.playground.domain.jwt.entities.Token;
 import com.mingyu.playground.domain.jwt.service.TokenService;
 import com.mingyu.playground.domain.jwt.util.JwtTokenizer;
+import com.mingyu.playground.domain.member.dto.request.SaveMemberRequestDto;
 import com.mingyu.playground.domain.member.entities.Member;
 import com.mingyu.playground.domain.member.repositories.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -78,5 +80,22 @@ public class AuthService {
         tokenService.saveOrUpdate(token);
 
         return token;
+    }
+
+    /**
+     * 회원가입
+     * @param authSignUpRequestDto AuthSignUpRequestDto
+     */
+    public void signup(AuthSignUpRequestDto authSignUpRequestDto) {
+        if (memberRepository.existsByEmail(authSignUpRequestDto.getEmail())) {
+            throw new PlayGroundCommonException(PlayGroundErrorCode.COMMON_ALREADY_EXISTS.getCode(), PlayGroundErrorCode.COMMON_ALREADY_EXISTS.getMessage());
+        }
+
+        if (memberRepository.existsByPhone(authSignUpRequestDto.getPhone())) {
+            throw new PlayGroundCommonException(PlayGroundErrorCode.COMMON_ALREADY_EXISTS.getCode(), PlayGroundErrorCode.COMMON_ALREADY_EXISTS.getMessage());
+        }
+
+        authSignUpRequestDto.setPassword(passwordEncoder.encode(authSignUpRequestDto.getPassword()));
+        memberRepository.save(authSignUpRequestDto.toEntity());
     }
 }

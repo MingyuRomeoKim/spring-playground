@@ -17,6 +17,7 @@ public enum PlayGroundErrorCode {
     // Auth
     AUTH_INVALID("E201", "유효하지 않은 사용자 정보입니다."),
     AUTH_PASSWORD_MISMATCH("E202", "비밀번호가 일치하지 않습니다."),
+    AUTH_PASSWORD_CHECK_MISMATCH("E202", "비밀번호와 비밀번호확인이 일치하지 않습니다."),
 
     // LOG ERROR
     LOG_ERROR_WRONG_DATA("E300", "올바르지 않는 데이터입니다."),

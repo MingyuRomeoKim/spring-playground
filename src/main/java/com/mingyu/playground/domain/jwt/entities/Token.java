@@ -29,10 +29,10 @@ public class Token extends DefaultTime {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @Column(columnDefinition = "varchar(300)", nullable = false)
+    @Column(columnDefinition = "varchar(500)", nullable = false)
     private String accessToken;
 
-    @Column(columnDefinition = "varchar(300)", nullable = false)
+    @Column(columnDefinition = "varchar(500)", nullable = false)
     private String refreshToken;
 
     @Column(nullable = false)

@@ -30,7 +30,8 @@ public class WebSecurityConfig {
 
     // Un Login User Allowed Pages
     String[] unLoginUserAllowedPages = {
-            "/api/v1/auth/login" // 로그인 API,
+            "/api/v1/auth/login", // 로그인 API,
+            "/api/v1/auth/signup", // 회원가입 API
     };
 
     @Bean
