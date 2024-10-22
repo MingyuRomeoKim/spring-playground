@@ -7,12 +7,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.firewall.StrictHttpFirewall;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -91,6 +93,19 @@ public class WebSecurityConfig {
         source.registerCorsConfiguration("/**", config);
 
         return new CorsFilter(source);
+    }
+
+    @Bean
+    public StrictHttpFirewall allowUrlEncodedDoubleSlashHttpFirewall() {
+        StrictHttpFirewall firewall = new StrictHttpFirewall();
+        // 더블슬레시 요청 허용
+        firewall.setAllowUrlEncodedDoubleSlash(true);
+        return firewall;
+    }
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.httpFirewall(allowUrlEncodedDoubleSlashHttpFirewall());
     }
 
     @Bean
