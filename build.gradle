@@ -37,6 +37,9 @@ dependencies {
 	// Json
 	implementation 'com.google.code.gson:gson:2.11.0'
 
+	// Log
+	implementation 'commons-logging:commons-logging'
+
 	// JWT
 	implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.12.6'
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.12.6'

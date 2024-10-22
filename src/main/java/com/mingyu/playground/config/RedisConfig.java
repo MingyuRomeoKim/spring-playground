@@ -133,7 +133,10 @@ public class RedisConfig extends CachingConfigurerSupport {
         RedisTemplate<?, ?> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory());   //connection
         redisTemplate.setKeySerializer(new StringRedisSerializer());    // key
+        redisTemplate.setHashKeySerializer(new StringRedisSerializer()); // hash key
+
         redisTemplate.setValueSerializer(new StringRedisSerializer());  // value
+        redisTemplate.setHashValueSerializer(new StringRedisSerializer()); // hash value
         return redisTemplate;
     }
 

@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.IntStream;
 
 @SpringBootTest
-@ActiveProfiles("local")
+@ActiveProfiles("prod")
 class ArticleHitStorageServiceTest {
 
     private static final Logger log = LoggerFactory.getLogger(ArticleHitStorageServiceTest.class);
@@ -105,7 +105,7 @@ class ArticleHitStorageServiceTest {
                 // 조회수가 몰리는 동안 주기적으로 updateHitStorage 실행
                 while (isRunning.get()) {
                     articleHitStorageService.updateHitStorage();
-                    Thread.sleep(100); // 100ms마다 실행
+                    Thread.sleep(1); // 100ms마다 실행
                 }
                 // 마지막으로 남은 데이터 처리
                 articleHitStorageService.updateHitStorage();

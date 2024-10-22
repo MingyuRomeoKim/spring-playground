@@ -1,6 +1,7 @@
 package com.mingyu.playground.domain.redis.repository;
 
 import com.mingyu.playground.domain.redis.entities.ArticleHit;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -10,13 +11,15 @@ import org.springframework.stereotype.Repository;
 
 import java.util.*;
 
+@Slf4j
 @Repository
 public class ArticleHitRepositoryImpl implements ArticleHitRepositoryCustom {
 
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
-    private static final String KEY_PREFIX = "article-hit";
+    private static final String HASH_TAG = "{article-hit}"; // 해시 태그 정의
+    private static final String KEY_PREFIX = "article-hit:" + HASH_TAG; // Set 키 및 Hash 키의 공통 부분
     private static final String KEY_PATTERN = KEY_PREFIX + ":";
 
     /**
@@ -28,7 +31,7 @@ public class ArticleHitRepositoryImpl implements ArticleHitRepositoryCustom {
      */
     @Override
     public int incrementPcHitCount(String articleId, Integer hits) {
-        String key = KEY_PREFIX + ":" + articleId;
+        String key = KEY_PATTERN + articleId; // 키 예시: "article-hit:{article-hit}:123"
         Long updatedValue = redisTemplate.opsForHash().increment(key, "hitCount", hits);
         redisTemplate.opsForSet().add(KEY_PREFIX, articleId);
 
@@ -44,7 +47,7 @@ public class ArticleHitRepositoryImpl implements ArticleHitRepositoryCustom {
      */
     @Override
     public int incrementMobileHitCount(String articleId, Integer hits) {
-        String key = KEY_PATTERN + articleId;
+        String key = KEY_PATTERN + articleId; // 키 예시: "article-hit:{article-hit}:123"
         Long updatedValue = redisTemplate.opsForHash().increment(key, "mobileHitCount", hits);
         redisTemplate.opsForSet().add(KEY_PREFIX, articleId);
 
@@ -69,7 +72,7 @@ public class ArticleHitRepositoryImpl implements ArticleHitRepositoryCustom {
             return returnMembers;
         }
 
-        return List.of();
+        return Collections.emptyList();
     }
 
     /**
@@ -84,7 +87,7 @@ public class ArticleHitRepositoryImpl implements ArticleHitRepositoryCustom {
         String luaScript = "local article_ids = redis.call('smembers', KEYS[1])\n" +
                 "local result = {}\n" +
                 "for _, article_id in ipairs(article_ids) do\n" +
-                "    local key = '" + KEY_PATTERN + "' .. article_id\n" +
+                "    local key = KEYS[2] .. ':' .. article_id\n" +
                 "    local data = redis.call('hgetall', key)\n" +
                 "    table.insert(result, key)\n" +
                 "    for i=1,#data,2 do\n" +
@@ -100,14 +103,16 @@ public class ArticleHitRepositoryImpl implements ArticleHitRepositoryCustom {
         RedisScript<List> script = RedisScript.of(luaScript, List.class);
 
         // 스크립트 실행 (KEYS에 'article-hit' 전달)
-        List<Object> result = redisTemplate.execute(script, Collections.singletonList(KEY_PREFIX));
+        List<Object> result = redisTemplate.execute(
+                script,
+                Arrays.asList(KEY_PREFIX, KEY_PREFIX)
+        );
 
         // 결과 파싱
         List<ArticleHit> articleHits = new ArrayList<>();
 
         if (result != null && !result.isEmpty()) {
             int index = 0;
-
             while (index < result.size()) {
                 // 키 가져오기
                 String key = result.get(index++).toString();
@@ -115,21 +120,21 @@ public class ArticleHitRepositoryImpl implements ArticleHitRepositoryCustom {
                 Map<String, String> dataMap = new HashMap<>();
 
                 // 다음 항목이 키이거나 리스트의 끝이 아닐 때까지 field-value를 가져옴
-                while (index < result.size() && !result.get(index).toString().startsWith(KEY_PATTERN)) {
+                while (index < result.size() && !result.get(index).toString().startsWith(KEY_PREFIX)) {
                     String field = result.get(index++).toString();
                     String value = result.get(index++).toString();
                     dataMap.put(field, value);
                 }
 
                 // 키에서 articleId 추출
-                String articleId = key.substring(KEY_PATTERN.length());
+                String articleId = key.substring((KEY_PREFIX + ":").length());
 
                 // ArticleHit 객체 생성
                 ArticleHit articleHit = mapToArticleHit(articleId, dataMap);
                 articleHits.add(articleHit);
             }
         }
-
+        log.info("articleHits: {}", articleHits);
         return articleHits;
     }
 
