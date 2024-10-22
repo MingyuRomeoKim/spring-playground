@@ -1,7 +1,7 @@
 package com.mingyu.playground.domain.jwt.entities;
 
 import com.mingyu.playground.common.emtities.DefaultTime;
-import com.mingyu.playground.domain.member.entities.Member;
+import com.mingyu.playground.domain.web.v1.member.entities.Member;
 import jakarta.persistence.*;
 
 import lombok.AllArgsConstructor;

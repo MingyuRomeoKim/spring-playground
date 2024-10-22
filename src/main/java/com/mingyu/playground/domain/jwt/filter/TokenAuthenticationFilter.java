@@ -5,7 +5,7 @@ import com.mingyu.playground.common.error.PlayGroundErrorCode;
 import com.mingyu.playground.domain.jwt.infrastructure.CustomUserDetails;
 import com.mingyu.playground.domain.jwt.infrastructure.JwtAuthenticationToken;
 import com.mingyu.playground.domain.jwt.util.JwtTokenizer;
-import com.mingyu.playground.domain.member.entities.Authority;
+import com.mingyu.playground.domain.web.v1.member.entities.Authority;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;

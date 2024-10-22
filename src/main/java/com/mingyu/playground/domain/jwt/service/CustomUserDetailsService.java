@@ -1,6 +1,6 @@
 package com.mingyu.playground.domain.jwt.service;
 
-import com.mingyu.playground.domain.member.repositories.MemberRepository;
+import com.mingyu.playground.domain.web.v1.member.repositories.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

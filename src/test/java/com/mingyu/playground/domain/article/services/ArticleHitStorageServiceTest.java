@@ -1,31 +1,30 @@
 package com.mingyu.playground.domain.article.services;
 
-import com.mingyu.playground.domain.article.entities.ArticleHitStorage;
-import com.mingyu.playground.domain.article.repositories.ArticleHitStorageRepository;
+import com.mingyu.playground.domain.web.v1.article.entities.ArticleHitStorage;
+import com.mingyu.playground.domain.web.v1.article.repositories.ArticleHitStorageRepository;
 import com.mingyu.playground.domain.redis.entities.ArticleHit;
 import com.mingyu.playground.domain.redis.repository.ArticleHitRepository;
+import com.mingyu.playground.domain.web.v1.article.services.ArticleHitStorageService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.IntStream;
 
+
 @SpringBootTest
-@ActiveProfiles("prod")
+@ActiveProfiles("local")
 class ArticleHitStorageServiceTest {
 
-    private static final Logger log = LoggerFactory.getLogger(ArticleHitStorageServiceTest.class);
     @Autowired
     private ArticleHitStorageService articleHitStorageService;
     @Autowired
@@ -75,7 +74,7 @@ class ArticleHitStorageServiceTest {
         }
         // Then
         List<ArticleHit> articleHitList =  articleHitRepository.findAllBy();
-        log.info("articleHitList: {}", articleHitList);
+
         Assertions.assertThat(articleHitList).size().isNotEqualTo(0);
         Assertions.assertThat(articleHitList).size().isGreaterThanOrEqualTo(loopCount);
     }
@@ -148,10 +147,8 @@ class ArticleHitStorageServiceTest {
         // Then
         // 최종적으로 Redis와 RDB에 데이터가 일관되게 저장되었는지 확인
         List<ArticleHit> articleHitList = articleHitRepository.findAllBy();
-        log.info("articleHitList (Redis): {}", articleHitList);
 
         List<ArticleHitStorage> articleHitStorageList = articleHitStorageRepository.findAll();
-        log.info("articleHitStorageList (RDB): {}", articleHitStorageList);
 
         // Assertions를 통해 데이터 검증
         // Redis에 남아 있는 데이터와 RDB에 저장된 데이터의 합이 기대한 값과 일치하는지 확인
@@ -176,7 +173,6 @@ class ArticleHitStorageServiceTest {
     @DisplayName("Spring Data Redis FindAll")
     public void test() {
         List<ArticleHit> articleHitList =  articleHitRepository.findAllBy();
-        log.info("articleHitList: {}", articleHitList);
         Assertions.assertThat(articleHitList).size().isNotEqualTo(0);
     }
 

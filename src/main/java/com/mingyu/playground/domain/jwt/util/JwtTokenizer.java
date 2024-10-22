@@ -3,7 +3,7 @@ package com.mingyu.playground.domain.jwt.util;
 
 import com.mingyu.playground.common.error.PlayGroundCommonException;
 import com.mingyu.playground.common.error.PlayGroundErrorCode;
-import com.mingyu.playground.domain.member.entities.Authority;
+import com.mingyu.playground.domain.web.v1.member.entities.Authority;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
