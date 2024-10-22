@@ -19,9 +19,7 @@ create database playground;
 create database playground_test;
 ```
 
-
 ***
-
 
 ## 2. redis 설치 및 실행
 ### 2.1 redis image install & run (local)
@@ -78,7 +76,6 @@ SET foo bar
 GET foo
 ```
 
-
 ***
 
 ## 3. swagger - api 문서 확인
@@ -87,3 +84,12 @@ GET foo
 ```html
 http://localhost:8080/swagger-ui/index.html#/
 ``` 
+
+***
+
+# spring-playground 실행
+
+## 1. active profile 설정
+- application.yml 파일에서 active profile을 설정하거나 intellij에서 active profile을 설정합니다.
+  - default : local
+- redis cluster 환경의 경우 active profile을 prod로 설정합니다.

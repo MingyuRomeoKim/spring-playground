@@ -1,5 +1,7 @@
 # Spring Boot Application Configuration
 spring:
+  profiles:
+    active: local
   application:
     name: playground
   datasource:
@@ -23,13 +25,16 @@ jwt:
     secret: e3545b171440dc2bddb1757e49c8b1470221d243f986a19dec44669d3c0d0f9437b4cf769756b9a2197e605e9b1924bb58faac5f578424be00ea92369fcc521d
     expire: 2592000000
 # Redis Configuration
-redis:
+redis-cluster:
   host1: localhost
   host2: localhost
   host3: localhost
-  port1: 6379
-  port2: 6379
-  port3: 6379
+  port1: 7001
+  port2: 7002
+  port3: 7003
   timeout:
     socket: 5000
     client: 500
+redis:
+  host: localhost
+  port: 6379

@@ -35,21 +35,25 @@ import java.util.Map;
 @EnableCaching
 @EnableRedisRepositories
 public class RedisConfig extends CachingConfigurerSupport {
-    @Value("${redis.host1}")
+    @Value("${redis.host}")
+    private String host;
+    @Value("${redis.port}")
+    private int port;
+    @Value("${redis-cluster.host1}")
     private String host1;
-    @Value("${redis.host2}")
+    @Value("${redis-cluster.host2}")
     private String host2;
-    @Value("${redis.host3}")
+    @Value("${redis-cluster.host3}")
     private String host3;
-    @Value("${redis.port1}")
+    @Value("${redis-cluster.port1}")
     private int port1;
-    @Value("${redis.port2}")
+    @Value("${redis-cluster.port2}")
     private int port2;
-    @Value("${redis.port3}")
+    @Value("${redis-cluster.port3}")
     private int port3;
-    @Value("${redis.timeout.socket}")
+    @Value("${redis-cluster.timeout.socket}")
     private int timeoutSocket;
-    @Value("${redis.timeout.client}")
+    @Value("${redis-cluster.timeout.client} ")
     private int timeoutClient;
 
     /**
@@ -60,8 +64,8 @@ public class RedisConfig extends CachingConfigurerSupport {
     @Profile("local")
     public RedisConnectionFactory redisConnectionFactoryLocal() {
         RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
-        redisStandaloneConfiguration.setHostName(host1);
-        redisStandaloneConfiguration.setPort(port1);
+        redisStandaloneConfiguration.setHostName(host);
+        redisStandaloneConfiguration.setPort(port);
         return new LettuceConnectionFactory(redisStandaloneConfiguration);
     }
 
