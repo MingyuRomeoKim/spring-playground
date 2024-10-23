@@ -5,10 +5,13 @@ import com.mingyu.playground.dto.auth.request.AuthLoginRequestDto;
 import com.mingyu.playground.dto.auth.request.AuthSignUpRequestDto;
 import com.mingyu.playground.dto.auth.response.AuthLoginResponseDto;
 import com.mingyu.playground.entity.member.Member;
+import com.mingyu.playground.entity.member.Token;
 import com.mingyu.playground.errors.PlayGroundCommonException;
 import com.mingyu.playground.errors.PlayGroundErrorCode;
+import com.mingyu.playground.v1.jwt.util.JwtTokenizer;
+import com.mingyu.playground.v1.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.token.TokenService;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

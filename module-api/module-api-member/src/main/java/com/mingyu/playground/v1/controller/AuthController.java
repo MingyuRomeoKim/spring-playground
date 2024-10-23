@@ -5,6 +5,7 @@ import com.mingyu.playground.dto.auth.request.AuthLoginRequestDto;
 import com.mingyu.playground.dto.auth.request.AuthSignUpRequestDto;
 import com.mingyu.playground.dto.auth.response.AuthLoginResponseDto;
 import com.mingyu.playground.response.PlayGroundResponse;
+import com.mingyu.playground.v1.jwt.util.JwtTokenizer;
 import com.mingyu.playground.v1.service.AuthService;
 import com.mingyu.playground.v1.service.TokenService;
 import io.swagger.v3.oas.annotations.Operation;

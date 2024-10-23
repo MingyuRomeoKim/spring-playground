@@ -1,6 +1,7 @@
 package com.mingyu.playground.dto.member.request;
 
-import com.mingyu.playground.domain.web.v1.member.entities.Member;
+
+import com.mingyu.playground.entity.member.Member;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

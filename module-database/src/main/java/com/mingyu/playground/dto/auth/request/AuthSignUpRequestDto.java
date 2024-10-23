@@ -2,6 +2,7 @@ package com.mingyu.playground.dto.auth.request;
 
 
 import com.mingyu.playground.entity.member.Member;
+import com.mingyu.playground.validations.PasswordMatches;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
