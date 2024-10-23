@@ -1,0 +1,14 @@
+bootJar {
+    enabled = false
+}
+
+subprojects {
+    dependencies {
+        implementation project(':module-core')
+        implementation project(':module-database')
+
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+        implementation 'org.springframework.boot:spring-boot-starter-security'
+    }
+}

@@ -1,0 +1,19 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.mingyu.playground'
+version = 'unspecified'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation project(':module-core')
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+}
+
+test {
+    useJUnitPlatform()
+}
