@@ -4,62 +4,85 @@ plugins {
 	id 'io.spring.dependency-management' version '1.1.6'
 }
 
-group = 'com.mingyu'
-version = '0.0.1-SNAPSHOT'
-
-java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(23)
-	}
+bootJar {
+	enabled = false
 }
 
 repositories {
 	mavenCentral()
 }
 
-dependencies {
-	runtimeOnly 'com.mysql:mysql-connector-j'
+subprojects {
+	group = 'com.mingyu'
+	version = '0.0.1-SNAPSHOT'
 
-	// Lombok
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
+	java {
+		toolchain {
+			languageVersion = JavaLanguageVersion.of(23)
+		}
+	}
 
-	// Spring Boot
-	implementation 'org.springframework.boot:spring-boot-starter'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	apply {
+		plugin 'java'
+		plugin 'java-library'
+		plugin 'io.spring.dependency-management'
+		plugin 'org.springframework.boot'
+	}
 
-	// Swagger
-	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
+	configurations {
+		compileOnly {
+			extendsFrom annotationProcessor
+		}
+	}
 
-	// Json
-	implementation 'com.google.code.gson:gson:2.11.0'
+	repositories {
+		mavenCentral()
+	}
 
-	// Log
-	implementation 'commons-logging:commons-logging'
+	dependencies {
 
-	// JWT
-	implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.12.6'
-	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.12.6'
-	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.12.6'
+		// Lombok
+		runtimeOnly 'com.mysql:mysql-connector-j'
+		compileOnly 'org.projectlombok:lombok'
+		annotationProcessor 'org.projectlombok:lombok'
 
-	// Validation
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
-	annotationProcessor 'jakarta.persistence:jakarta.persistence-api'
+		// Spring Boot
+		implementation 'org.springframework.boot:spring-boot-starter'
+		implementation 'org.springframework.boot:spring-boot-starter-web'
+		implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+		implementation 'org.springframework.boot:spring-boot-starter-security'
+		implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
-	// Mapper
-	implementation 'org.mapstruct:mapstruct:1.5.5.Final'
+		// Swagger
+		implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
 
-	// Test
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.springframework.security:spring-security-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
-	testImplementation 'org.assertj:assertj-core'
-}
+		// Json
+		implementation 'com.google.code.gson:gson:2.11.0'
 
-tasks.named('test') {
-	useJUnitPlatform()
+		// Log
+//		implementation 'commons-logging:commons-logging'
+
+		// JWT
+		implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.12.6'
+		runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.12.6'
+		runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.12.6'
+
+		// Validation
+		implementation 'org.springframework.boot:spring-boot-starter-validation'
+		annotationProcessor 'jakarta.persistence:jakarta.persistence-api'
+
+		// Mapper
+		implementation 'org.mapstruct:mapstruct:1.5.5.Final'
+
+		// Test
+		testImplementation 'org.springframework.boot:spring-boot-starter-test'
+		testImplementation 'org.springframework.security:spring-security-test'
+		testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+		testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+		testImplementation 'org.assertj:assertj-core'
+	}
+
+	test {
+		useJUnitPlatform()
+	}
 }

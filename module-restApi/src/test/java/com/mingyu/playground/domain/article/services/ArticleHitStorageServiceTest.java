@@ -1,15 +1,14 @@
 package com.mingyu.playground.domain.article.services;
 
-import com.mingyu.playground.domain.web.v1.article.entities.ArticleHitStorage;
-import com.mingyu.playground.domain.web.v1.article.repositories.ArticleHitStorageRepository;
 import com.mingyu.playground.domain.redis.entities.ArticleHit;
 import com.mingyu.playground.domain.redis.repository.ArticleHitRepository;
+import com.mingyu.playground.domain.web.v1.article.entities.ArticleHitStorage;
+import com.mingyu.playground.domain.web.v1.article.repositories.ArticleHitStorageRepository;
 import com.mingyu.playground.domain.web.v1.article.services.ArticleHitStorageService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -34,7 +33,8 @@ class ArticleHitStorageServiceTest {
 
     @BeforeEach
     void cleanUp() {
-//        articleHitRepository.deleteAll();
+        articleHitRepository.deleteAll();
+        articleHitStorageRepository.deleteAll();
     }
 
     @Test

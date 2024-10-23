@@ -2,7 +2,6 @@ package com.mingyu.playground.domain.redis.repository;
 
 import com.mingyu.playground.domain.redis.entities.ArticleHit;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

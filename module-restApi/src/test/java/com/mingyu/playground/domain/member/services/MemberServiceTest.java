@@ -54,7 +54,7 @@ class MemberServiceTest {
     @DisplayName("이메일로 멤버 조회 성공")
     void testGetMemberByEmail_Success() {
         // Arrange
-        when(memberRepository.findByEmail("mingyu")).thenReturn(java.util.Optional.of(member));
+        when(memberRepository.findByEmail("mingyu")).thenReturn(Optional.of(member));
         // Act
         FindMemberResponseDto findMember = memberService.getMemberByEmail("mingyu");
         // Assert
@@ -66,7 +66,7 @@ class MemberServiceTest {
     @DisplayName("이메일로 멤버 조회 못 찾음")
     void testGetMemberByEmail_NotFound() {
         // Arrange
-        when(memberRepository.findByEmail("mingyu")).thenReturn(java.util.Optional.empty());
+        when(memberRepository.findByEmail("mingyu")).thenReturn(Optional.empty());
         // Act & Assert
         assertThatThrownBy(() -> memberService.getMemberByEmail("mingyu")).isInstanceOf(PlayGroundCommonException.class).hasMessage(PlayGroundErrorCode.COMMON_NOT_FOUND.getMessage());
     }
@@ -98,7 +98,7 @@ class MemberServiceTest {
     @DisplayName("멤버 삭제 성공")
     void testDeleteMember_Success() {
         // Arrange
-        when(memberRepository.findByEmail("mingyu")).thenReturn(java.util.Optional.of(member));
+        when(memberRepository.findByEmail("mingyu")).thenReturn(Optional.of(member));
         // Act
         memberService.deleteMemberByEmail("mingyu");
         // Assert
@@ -109,7 +109,7 @@ class MemberServiceTest {
     @DisplayName("멤버 삭제 못 찾음")
     void testDeleteMember_NotFound() {
         // Arrange
-        when(memberRepository.findByEmail("mingyu")).thenReturn(java.util.Optional.empty());
+        when(memberRepository.findByEmail("mingyu")).thenReturn(Optional.empty());
         // Act & Assert
         assertThatThrownBy(() -> memberService.deleteMemberByEmail("mingyu")).isInstanceOf(PlayGroundCommonException.class).hasMessage(PlayGroundErrorCode.COMMON_NOT_FOUND.getMessage());
     }
@@ -118,7 +118,7 @@ class MemberServiceTest {
     @DisplayName("멤버 수정 성공")
     void testUpdateMember_Success() {
         // Arrange
-        when(memberRepository.findByEmail("mingyu")).thenReturn(java.util.Optional.of(member));
+        when(memberRepository.findByEmail("mingyu")).thenReturn(Optional.of(member));
 
         // Act
         UpdateMemberRequestDto updateMemberRequestDto = UpdateMemberRequestDto.builder()
