@@ -29,6 +29,13 @@ subprojects {
 		plugin 'org.springframework.boot'
 	}
 
+	dependencyManagement {
+		imports {
+			// spring cloud 의존성 관리
+			mavenBom("org.springframework.cloud:spring-cloud-dependencies:2023.0.3")
+		}
+	}
+
 	configurations {
 		compileOnly {
 			extendsFrom annotationProcessor
@@ -48,10 +55,6 @@ subprojects {
 
 		// Spring Boot
 		implementation 'org.springframework.boot:spring-boot-starter'
-		implementation 'org.springframework.boot:spring-boot-starter-web'
-		implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-		implementation 'org.springframework.boot:spring-boot-starter-security'
-		implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
 		// Swagger
 		implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
