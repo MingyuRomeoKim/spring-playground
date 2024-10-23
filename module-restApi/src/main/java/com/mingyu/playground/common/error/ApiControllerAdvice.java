@@ -2,6 +2,7 @@ package com.mingyu.playground.common.error;
 
 import com.google.gson.Gson;
 import com.mingyu.playground.common.response.ApiResponseMessage;
+import com.mingyu.playground.errors.PlayGroundErrorCode;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

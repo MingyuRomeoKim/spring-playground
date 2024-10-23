@@ -1,7 +1,7 @@
 package com.mingyu.playground.common.response;
 
 
-import com.mingyu.playground.common.error.PlayGroundErrorCode;
+import com.mingyu.playground.errors.PlayGroundErrorCode;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;

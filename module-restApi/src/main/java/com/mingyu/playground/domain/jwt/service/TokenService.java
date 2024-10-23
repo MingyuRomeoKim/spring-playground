@@ -1,7 +1,7 @@
 package com.mingyu.playground.domain.jwt.service;
 
 import com.mingyu.playground.common.error.PlayGroundCommonException;
-import com.mingyu.playground.common.error.PlayGroundErrorCode;
+import com.mingyu.playground.errors.PlayGroundErrorCode;
 import com.mingyu.playground.domain.jwt.entities.Token;
 import com.mingyu.playground.domain.jwt.repository.TokenRepository;
 import lombok.RequiredArgsConstructor;

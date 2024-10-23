@@ -1,7 +1,7 @@
 package com.mingyu.playground.domain.member.services;
 
 import com.mingyu.playground.common.error.PlayGroundCommonException;
-import com.mingyu.playground.common.error.PlayGroundErrorCode;
+import com.mingyu.playground.errors.PlayGroundErrorCode;
 import com.mingyu.playground.domain.web.v1.member.dto.request.SaveMemberRequestDto;
 import com.mingyu.playground.domain.web.v1.member.dto.request.UpdateMemberRequestDto;
 import com.mingyu.playground.domain.web.v1.member.dto.response.FindMemberResponseDto;

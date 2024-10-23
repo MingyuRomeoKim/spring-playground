@@ -1,4 +1,4 @@
-package com.mingyu.playground.common.error;
+package com.mingyu.playground.errors;
 
 public enum PlayGroundErrorCode {
     // Common

@@ -1,7 +1,7 @@
 package com.mingyu.playground.domain.web.v1.auth.service;
 
 import com.mingyu.playground.common.error.PlayGroundCommonException;
-import com.mingyu.playground.common.error.PlayGroundErrorCode;
+import com.mingyu.playground.errors.PlayGroundErrorCode;
 import com.mingyu.playground.domain.web.v1.auth.dto.request.AuthLoginRequestDto;
 import com.mingyu.playground.domain.web.v1.auth.dto.request.AuthSignUpRequestDto;
 import com.mingyu.playground.domain.web.v1.auth.dto.response.AuthLoginResponseDto;

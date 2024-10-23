@@ -1,6 +1,6 @@
 package com.mingyu.playground.common.validations;
 
-import com.mingyu.playground.common.error.PlayGroundErrorCode;
+import com.mingyu.playground.errors.PlayGroundErrorCode;
 import com.mingyu.playground.domain.web.v1.auth.dto.request.AuthSignUpRequestDto;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;

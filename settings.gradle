@@ -1,3 +1,4 @@
 rootProject.name = 'playground'
 include 'module-restApi'
+include 'module-core'
 
