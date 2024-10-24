@@ -1,7 +1,8 @@
 package com.mingyu.playground.v1.repository;
 
 
-import com.mingyu.playground.entity.member.Token;
+
+import com.mingyu.playground.v1.entity.Token;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

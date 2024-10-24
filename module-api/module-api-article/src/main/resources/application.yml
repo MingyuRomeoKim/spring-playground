@@ -5,6 +5,7 @@ spring:
     include:
       - database
       - redis
+
 #Eureka Configuration
 eureka:
   instance:

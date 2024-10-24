@@ -1,8 +1,8 @@
 package com.mingyu.playground.v1.jwt.util;
 
-import com.mingyu.playground.entity.member.Authority;
 import com.mingyu.playground.errors.PlayGroundCommonException;
 import com.mingyu.playground.errors.PlayGroundErrorCode;
+import com.mingyu.playground.v1.entity.Authority;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;

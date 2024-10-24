@@ -1,18 +1,11 @@
-plugins {
-    id 'java'
+bootJar {
+    enabled = true
 }
 
-group = 'com.mingyu.playground'
-version = 'unspecified'
-
-repositories {
-    mavenCentral()
+jar {
+    enabled = true
 }
 
 dependencies {
-
-}
-
-test {
-    useJUnitPlatform()
+    implementation project(':module-redis')
 }

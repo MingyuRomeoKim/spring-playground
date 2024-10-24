@@ -1,4 +1,4 @@
-package com.mingyu.playground.entity.member;
+package com.mingyu.playground.v1.entity;
 
 import org.springframework.security.core.GrantedAuthority;
 

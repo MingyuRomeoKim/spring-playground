@@ -1,5 +1,4 @@
-package com.mingyu.playground.entity.member;
-
+package com.mingyu.playground.v1.entity;
 
 import com.mingyu.playground.dto.member.request.UpdateMemberRequestDto;
 import com.mingyu.playground.entity.DefaultTime;

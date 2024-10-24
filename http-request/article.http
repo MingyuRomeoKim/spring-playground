@@ -1,0 +1,7 @@
+### webGatway Test
+GET {{host}}/api/v1/article/test
+content-type: application/json
+accept: application/json
+
+
+###

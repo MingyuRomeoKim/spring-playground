@@ -1,9 +1,8 @@
 package com.mingyu.playground.v1.service;
 
-
-import com.mingyu.playground.entity.member.Token;
 import com.mingyu.playground.errors.PlayGroundCommonException;
 import com.mingyu.playground.errors.PlayGroundErrorCode;
+import com.mingyu.playground.v1.entity.Token;
 import com.mingyu.playground.v1.repository.TokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

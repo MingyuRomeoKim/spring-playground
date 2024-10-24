@@ -1,8 +1,7 @@
 package com.mingyu.playground.v1.repository;
 
 
-
-import com.mingyu.playground.entity.member.Member;
+import com.mingyu.playground.v1.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

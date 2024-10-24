@@ -1,10 +1,10 @@
-package com.mingyu.playground.mapper.member;
+package com.mingyu.playground.v1.mapper;
 
 
 import com.mingyu.playground.dto.member.response.FindMemberResponseDto;
-import com.mingyu.playground.entity.member.Member;
+import com.mingyu.playground.v1.entity.Member;
 
-public class MemberMapperImpl implements MemberMapper{
+public class MemberMapperImpl implements MemberMapper {
 
     @Override
     public FindMemberResponseDto toFindMemberResponseDto(Member member) {

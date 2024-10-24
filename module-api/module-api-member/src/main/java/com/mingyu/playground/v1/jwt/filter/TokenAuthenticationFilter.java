@@ -1,9 +1,8 @@
 package com.mingyu.playground.v1.jwt.filter;
 
-
-import com.mingyu.playground.entity.member.Authority;
 import com.mingyu.playground.errors.PlayGroundCommonException;
 import com.mingyu.playground.errors.PlayGroundErrorCode;
+import com.mingyu.playground.v1.entity.Authority;
 import com.mingyu.playground.v1.jwt.infrastructure.CustomUserDetails;
 import com.mingyu.playground.v1.jwt.infrastructure.JwtAuthenticationToken;
 import com.mingyu.playground.v1.jwt.util.JwtTokenizer;

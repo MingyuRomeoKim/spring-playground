@@ -1,7 +1,7 @@
-package com.mingyu.playground.entity.member;
-
+package com.mingyu.playground.v1.entity;
 
 import com.mingyu.playground.entity.DefaultTime;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
