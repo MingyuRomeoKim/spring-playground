@@ -1,5 +1,5 @@
 ### 로그인
-POST http://localhost:8080/api/v1/auth/login
+POST {{host}}/api/v1/auth/login
 Content-Type: application/json
 Accept: application/json
 
@@ -13,13 +13,13 @@ Accept: application/json
 %}
 
 ### 로그아웃
-DELETE http://localhost:8080/api/v1/auth/logout
+DELETE {{host}}/api/v1/auth/logout
 Content-Type: application/json
 Accept: application/json
 Authorization: Bearer {{auth_token}}
 
 ### 회원가입
-POST http://localhost:8080/api/v1/auth/signup
+POST {{host}}/api/v1/auth/signup
 Content-Type: application/json
 Accept: application/json
 Authorization: Bearer {{auth_token}}

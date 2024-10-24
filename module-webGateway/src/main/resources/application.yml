@@ -1,0 +1,51 @@
+
+spring:
+  application:
+    name: playground-web-gateway
+  config:
+    import: "optional:configserver:"
+  cloud:
+    gateway:
+      # 먼저 선언한 순서대로 필터 적용.
+      routes:
+        - id: member-api
+          # Eureka 사용할 경우
+          uri: lb://member-api
+          # Eureka 사용 안할 경우
+          #uri: http://localhost:18085
+          # /api/v1/member/** 경로로 들어오는 요청을 member-api로 라우팅
+          predicates:
+            - Path=/api/v1/member/**
+            - Path=/api/v1/auth/**
+          filters:
+            - AddRequestHeader=first-request, first-request-header2
+            - AddResponseHeader=first-response, first-response-header2
+        - id: article-api
+          uri: lb://article-api
+          predicates:
+            - Path=/api/v1/article/**
+          filters:
+            - AddRequestHeader=first-request, first-request-header2
+            - AddResponseHeader=first-response, first-response-header2
+
+server:
+  port: 8090
+
+app:
+  host: http://localhost:8090
+springdoc:
+  swagger-ui:
+    urls[0]:
+      name: Member API
+      url: ${app.host}/api/v1/member/v3/api-docs
+    urls[1]:
+      name: Article API
+      url: ${app.host}/api/v1/article/v3/api-docs
+    use-root-path: true
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka

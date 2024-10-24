@@ -9,4 +9,7 @@ include 'module-database'
 include 'module-redis'
 include 'module-api:module-api-article'
 findProject(':module-api:module-api-article')?.name = 'module-api-article'
+include 'module-webGateway'
+include 'module-api:module-api-auth'
+findProject(':module-api:module-api-auth')?.name = 'module-api-auth'
 

@@ -1,11 +1,10 @@
 spring:
   application:
-    name: member-api
+    name: article-api
   profiles:
     include:
       - database
       - redis
-
 #Eureka Configuration
 eureka:
   instance:
@@ -24,3 +23,15 @@ jwt:
   refresh:
     secret: e3545b171440dc2bddb1757e49c8b1470221d243f986a19dec44669d3c0d0f9437b4cf769756b9a2197e605e9b1924bb58faac5f578424be00ea92369fcc521d
     expire: 2592000000
+
+# Swagger Configuration
+springdoc:
+  api-docs:
+    version: openapi_3_1
+    enabled: true
+    path: /api/v1/article/v3/api-docs
+  enable-spring-security: true
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+server:
+  port: 18082
