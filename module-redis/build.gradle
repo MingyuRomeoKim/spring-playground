@@ -1,12 +1,9 @@
-plugins {
-    id 'java'
+bootJar {
+    enabled = false
 }
 
-group = 'com.mingyu.playground'
-version = 'unspecified'
-
-repositories {
-    mavenCentral()
+jar {
+    enabled = true
 }
 
 dependencies {

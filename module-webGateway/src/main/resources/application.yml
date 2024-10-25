@@ -1,5 +1,5 @@
 server:
-  port: 8090
+  port: 8080
 
 eureka:
   client:
@@ -7,6 +7,14 @@ eureka:
     fetch-registry: true
     service-url:
       defaultZone: http://localhost:8761/eureka
+
+jwt:
+  access:
+    secret: 9295d3232d3428c866241359d89485431868fa3c0207ab2fef5b2dff1a371ea95a9df0b74588f1d34bb6c2ce0078e39d8b9faf32c36cf97b56c09e8876007416
+    expire: 86400000
+  refresh:
+    secret: e3545b171440dc2bddb1757e49c8b1470221d243f986a19dec44669d3c0d0f9437b4cf769756b9a2197e605e9b1924bb58faac5f578424be00ea92369fcc521d
+    expire: 2592000000
 
 spring:
   application:
@@ -17,18 +25,27 @@ spring:
     gateway:
       # 먼저 선언한 순서대로 필터 적용.
       routes:
-        - id: member-api
+        - id: auth-api
           # Eureka 사용할 경우
-          uri: lb://member-api
+          uri: lb://auth-api
           # Eureka 사용 안할 경우
           #uri: http://localhost:18085
           # /api/v1/member/** 경로로 들어오는 요청을 member-api로 라우팅
           predicates:
-            - Path=/api/v1/member/**
             - Path=/api/v1/auth/**
           filters:
             - AddRequestHeader=first-request, first-request-header2
             - AddResponseHeader=first-response, first-response-header2
+
+        - id : auth-api
+          uri: lb://auth-api
+          predicates:
+            - Path=/api/v1/member/**
+          filters:
+            - AddRequestHeader=first-request, first-request-header2
+            - AddResponseHeader=first-response, first-response-header2
+            - AuthorizationHeaderFilter
+
         - id: article-api
           uri: lb://article-api
           predicates:
@@ -36,6 +53,9 @@ spring:
           filters:
             - AddRequestHeader=first-request, first-request-header2
             - AddResponseHeader=first-response, first-response-header2
+            - AuthorizationHeaderFilter
+  main:
+    web-application-type: reactive
 springdoc:
   swagger-ui:
     urls[0]:

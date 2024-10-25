@@ -1,6 +1,9 @@
+server:
+  port: 18081
+
 spring:
   application:
-    name: member-api
+    name: auth-api
   profiles:
     include:
       - database
