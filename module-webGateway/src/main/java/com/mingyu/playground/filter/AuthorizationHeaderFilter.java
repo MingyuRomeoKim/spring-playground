@@ -1,5 +1,7 @@
 package com.mingyu.playground.filter;
 
+import com.mingyu.playground.util.JwtTokenizer;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,16 +14,24 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+import java.util.Collection;
+import java.util.Collections;
+
 @Slf4j
 @Component
-@RequiredArgsConstructor
 public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<AuthorizationHeaderFilter.Config> {
 
-    private final Environment environment;
+    private final JwtTokenizer jwtTokenizer;
+
+    public AuthorizationHeaderFilter(JwtTokenizer jwtTokenizer) {
+        super(Config.class);
+        this.jwtTokenizer = jwtTokenizer;
+    }
 
     @Override
     public GatewayFilter apply(AuthorizationHeaderFilter.Config config) {
@@ -40,7 +50,7 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
             }
 
             String authorizationHeader = request.getHeaders().get(HttpHeaders.AUTHORIZATION).get(0);
-            String jwt = authorizationHeader.replace("Bearer", "");
+            String jwt = authorizationHeader.replace("Bearer ", "");
             log.info("jwt : {}", jwt);
 
             // JWT 검증
@@ -63,19 +73,17 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
     }
 
     private boolean isJwtValid(String jwt) {
-        String subject = null;
 
-        try {
-            subject = Jwts.parser()
-                    .setSigningKey(environment.getProperty("jwt.access.secret"))
-                    .build()
-                    .parseClaimsJws(jwt)
-                    .getBody()
-                    .getSubject();
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        Claims claims = jwtTokenizer.parseAccessToken(jwt); // 토큰에서 클레임을 파싱
+
+        if (claims == null || Strings.isBlank(claims.getSubject())) {
+            return false;
         }
-        return !Strings.isBlank(subject);
+
+        String email = claims.getSubject(); // 이메일을 가져옴
+        String id = claims.get("id", String.class); // 사용자 ID를 가져옴
+        String name = claims.get("name", String.class); // 이름을 가져옴
+        return true;
     }
 
     public static class Config {}

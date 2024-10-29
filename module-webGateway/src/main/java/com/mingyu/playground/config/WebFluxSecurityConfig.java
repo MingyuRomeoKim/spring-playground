@@ -1,12 +1,24 @@
 package com.mingyu.playground.config;
 
+import com.mingyu.playground.util.JwtTokenizer;
+import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.userdetails.MapReactiveUserDetailsService;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.security.web.server.context.ServerSecurityContextRepository;
+import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Mono;
+
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
 
 @Configuration
 @EnableWebFluxSecurity
@@ -30,26 +42,40 @@ public class WebFluxSecurityConfig {
     };
 
     @Bean
-    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity serverHttpSecurity) {
+    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity serverHttpSecurity, JwtTokenizer jwtTokenizer) {
 
         serverHttpSecurity
+                .cors(Customizer.withDefaults())
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
-                .cors(ServerHttpSecurity.CorsSpec::disable)
                 .formLogin(ServerHttpSecurity.FormLoginSpec::disable)
                 .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
                 .anonymous(ServerHttpSecurity.AnonymousSpec::disable);
 
         serverHttpSecurity.authorizeExchange((authorize) -> authorize
-                // 전체 접근 허용
-                .pathMatchers(allAllowPages).permitAll()
-                // 로그인하지 않은 사용자 접근 허용
-                .pathMatchers(unLoginUserAllowedPages).permitAll()
-                // 이외의 모든 요청은 인증 정보 필요
-                .anyExchange().authenticated()
-        );
+                // Gateway 에서는 AuthorizationHeaderFilter 에서 jwt를 체크하므로 authenticated 설정 불 필요. 때문에 전체 PermitAll로 설정
+                .anyExchange().permitAll()
+        )
+                .securityContextRepository(new StatelessWebSessionSecurityContextRepository())
+        ;
 
         return serverHttpSecurity.build();
+    }
 
+    private static class StatelessWebSessionSecurityContextRepository implements ServerSecurityContextRepository {
+
+        private static final Mono<SecurityContext> EMPTY_CONTEXT = Mono.empty();
+
+        @Override
+        public Mono<Void> save(ServerWebExchange exchange, SecurityContext context) {
+            return Mono.empty();
+        }
+
+        @Override
+        public Mono<SecurityContext> load(ServerWebExchange exchange) {
+            return EMPTY_CONTEXT;
+        }
     }
 
 }
+
+

@@ -8,15 +8,22 @@ Accept: application/json
   "password": "1Q2w3e4r!"
 }
 
+> {%
+    client.global.set("auth_token", response.body.result.accessToken);
+%}
+
+
 ### Logout
 DELETE {{host}}/api/v1/auth/logout
 Content-Type: application/json
 Accept: application/json
+Authorization: Bearer {{auth_token}}
 
 ### Insert Member
 POST {{host}}/api/v1/member
 Content-Type: application/json
 Accept: application/json
+Authorization: Bearer {{auth_token}}
 
 {
   "name": "김민규",
@@ -30,21 +37,25 @@ Accept: application/json
 GET {{host}}/api/v1/member/list
 Content-Type: application/json
 Accept: application/json
+Authorization: Bearer {{auth_token}}
 
 ### Get Member By Email
 GET {{host}}/api/v1/member/mingyu2@test.com
 Content-Type: application/json
 Accept: application/json
+Authorization: Bearer {{auth_token}}
 
 ### Delete member By Email
 DELETE {{host}}/api/v1/member/mingyu2@test.com
 Content-Type: application/json
 Accept: application/json
+Authorization: Bearer {{auth_token}}
 
 ### Update Member By Email
 PUT {{host}}/api/v1/member/mingyu2@test.com
 Content-Type: application/json
 Accept: application/json
+Authorization: Bearer {{auth_token}}
 
 {
   "name": "김민규수정",

@@ -15,10 +15,10 @@ public class CorsConfiguration implements WebFluxConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         WebFluxConfigurer.super.addCorsMappings(registry);
         registry.addMapping("/**")
-                .allowCredentials(true)
-                .allowedOrigins("*")
+                .allowedOrigins("http://localhost:8080")
                 .allowedHeaders("*")
                 .allowedMethods("GET", "POST", "PUT", "DELETE")
+                .allowCredentials(true)
                 .allowedOriginPatterns("*");
 
     }

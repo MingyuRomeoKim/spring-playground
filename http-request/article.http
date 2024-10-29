@@ -1,7 +1,30 @@
-### webGatway Test
+### Login
+POST {{host}}/api/v1/auth/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "mingyu3@test.com",
+  "password": "1Q2w3e4r!"
+}
+
+> {%
+    client.global.set("auth_token", response.body.result.accessToken);
+%}
+
+
+### Logout
+DELETE {{host}}/api/v1/auth/logout
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{auth_token}}
+
+> {%
+    client.global.set("auth_token", '');
+%}
+
+### Article Test
 GET {{host}}/api/v1/article/test
 content-type: application/json
 accept: application/json
-
-
-###
+authorization: Bearer {{auth_token}}
