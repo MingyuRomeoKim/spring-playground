@@ -1,6 +1,7 @@
 package com.mingyu.playground.filter;
 
 import io.jsonwebtoken.Jwts;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
 
@@ -17,14 +18,10 @@ import reactor.core.publisher.Mono;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<AuthorizationHeaderFilter.Config> {
 
     private final Environment environment;
-
-    public AuthorizationHeaderFilter(Environment environment) {
-        super(Config.class);
-        this.environment = environment;
-    }
 
     @Override
     public GatewayFilter apply(AuthorizationHeaderFilter.Config config) {
@@ -35,17 +32,20 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
 
             log.info("request uri : {}", request.getURI());
 
+            log.warn("request headers : {}", request.getHeaders());
+
             if (!request.getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
-                response.setStatusCode(HttpStatus.UNAUTHORIZED);
+                response.setStatusCode(HttpStatus.UNPROCESSABLE_ENTITY);
                 return response.setComplete();
             }
 
             String authorizationHeader = request.getHeaders().get(HttpHeaders.AUTHORIZATION).get(0);
             String jwt = authorizationHeader.replace("Bearer", "");
+            log.info("jwt : {}", jwt);
 
             // JWT 검증
             if (!isJwtValid(jwt)) {
-                response.setStatusCode(HttpStatus.UNAUTHORIZED);
+                response.setStatusCode(HttpStatus.UNAVAILABLE_FOR_LEGAL_REASONS);
                 return response.setComplete();
             }
 
@@ -55,6 +55,7 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
     }
 
     private Mono<Void> onError(ServerWebExchange exchange, String err, HttpStatus httpStatus) {
+        log.error(err);
         ServerHttpResponse response = exchange.getResponse();
         response.setStatusCode(httpStatus);
 

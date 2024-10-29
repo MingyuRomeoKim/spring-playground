@@ -32,7 +32,7 @@ spring:
           #uri: http://localhost:18085
           # /api/v1/member/** 경로로 들어오는 요청을 member-api로 라우팅
           predicates:
-            - Path=/api/v1/auth/**
+            - Path=/api/v1/auth/login, /api/v1/auth/signup
           filters:
             - AddRequestHeader=first-request, first-request-header2
             - AddResponseHeader=first-response, first-response-header2
@@ -40,11 +40,10 @@ spring:
         - id : auth-api
           uri: lb://auth-api
           predicates:
-            - Path=/api/v1/member/**
+            - Path=/api/v1/member/**, api/v1/auth/logout
           filters:
             - AddRequestHeader=first-request, first-request-header2
             - AddResponseHeader=first-response, first-response-header2
-            - AuthorizationHeaderFilter
 
         - id: article-api
           uri: lb://article-api
@@ -53,7 +52,6 @@ spring:
           filters:
             - AddRequestHeader=first-request, first-request-header2
             - AddResponseHeader=first-response, first-response-header2
-            - AuthorizationHeaderFilter
   main:
     web-application-type: reactive
 springdoc:

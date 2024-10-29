@@ -1,15 +1,19 @@
 package com.mingyu.playground.config;
 
-import com.mingyu.playground.filter.AuthorizationHeaderFilter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 
 @Configuration
 @EnableWebFluxSecurity
+@RequiredArgsConstructor
 public class WebFluxSecurityConfig {
+
+    private final Environment environment;
 
     // All Allowed Pages
     String[] allAllowPages = {
@@ -21,6 +25,7 @@ public class WebFluxSecurityConfig {
     // Un Login User Allowed Pages
     String[] unLoginUserAllowedPages = {
             "/api/v1/auth/login", // 로그인 API,
+            "/api/v1/auth/loout", // 로그인 API,
             "/api/v1/auth/signup", // 회원가입 API
     };
 
@@ -29,17 +34,22 @@ public class WebFluxSecurityConfig {
 
         serverHttpSecurity
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
+                .cors(ServerHttpSecurity.CorsSpec::disable)
                 .formLogin(ServerHttpSecurity.FormLoginSpec::disable)
                 .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
                 .anonymous(ServerHttpSecurity.AnonymousSpec::disable);
 
         serverHttpSecurity.authorizeExchange((authorize) -> authorize
+                // 전체 접근 허용
                 .pathMatchers(allAllowPages).permitAll()
+                // 로그인하지 않은 사용자 접근 허용
                 .pathMatchers(unLoginUserAllowedPages).permitAll()
+                // 이외의 모든 요청은 인증 정보 필요
                 .anyExchange().authenticated()
         );
 
         return serverHttpSecurity.build();
 
     }
+
 }
