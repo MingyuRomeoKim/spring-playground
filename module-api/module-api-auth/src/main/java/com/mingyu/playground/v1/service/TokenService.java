@@ -21,13 +21,19 @@ public class TokenService {
      */
     @Transactional
     public void saveOrUpdate(Token token) {
-        Token savedToken = tokenRepository.findByMemberId(token.getMember().getId());
+        Token fineToken = tokenRepository.findByMemberId(token.getMember().getId());
 
-        if (savedToken == null) {
+        if (fineToken == null) {
             tokenRepository.save(token);
         } else {
-            savedToken.update(token.getAccessToken(), token.getRefreshToken(), token.getGrantType());
-            tokenRepository.save(savedToken);
+            Token saveToken = token.update(
+                    fineToken.getId(),
+                    fineToken.getMember(),
+                    token.getAccessToken(),
+                    token.getRefreshToken(),
+                    token.getGrantType()
+            );
+            tokenRepository.save(saveToken);
         }
     }
 

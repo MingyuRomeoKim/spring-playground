@@ -3,6 +3,7 @@ package com.mingyu.playground.util;
 import com.mingyu.playground.errors.PlayGroundCommonException;
 import com.mingyu.playground.errors.PlayGroundErrorCode;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
@@ -45,18 +46,23 @@ public class JwtTokenizer {
     public Claims parseToken(String token, byte[] secretKey) {
         Claims claims = null;
         try {
-
             claims = Jwts.parser()
                     .setSigningKey(getSigningKey(secretKey))
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
 
+        } catch (ExpiredJwtException expiredJwtException) {
+
         } catch (SignatureException e) { // 토큰 유효성 체크 실패 시
             throw new PlayGroundCommonException(PlayGroundErrorCode.JWT_INVALID_ERROR.getCode(), PlayGroundErrorCode.JWT_INVALID_ERROR.getMessage());
         }
 
         return claims;
+    }
+
+    public Claims parseRefreshToken(String refreshToken) {
+        return parseToken(refreshToken, getSecretByte(refreshSecret));
     }
 
     /**

@@ -51,4 +51,14 @@ public class Token extends DefaultTime {
                 .grantType(grantType)
                 .build();
     }
+
+    public Token update(UUID id, Member member, String accessToken, String refreshToken, String grantType) {
+        return Token.builder()
+                .id(id)
+                .member(member)
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .grantType(grantType)
+                .build();
+    }
 }

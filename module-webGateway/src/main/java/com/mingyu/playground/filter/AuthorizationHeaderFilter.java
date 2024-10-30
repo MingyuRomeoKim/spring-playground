@@ -76,7 +76,7 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
 
         Claims claims = jwtTokenizer.parseAccessToken(jwt); // 토큰에서 클레임을 파싱
 
-        if (claims == null || Strings.isBlank(claims.getSubject())) {
+        if (claims == null || Strings.isBlank(claims.getSubject())) { // 클레임이 없거나 이메일이 없으면 false
             return false;
         }
 
