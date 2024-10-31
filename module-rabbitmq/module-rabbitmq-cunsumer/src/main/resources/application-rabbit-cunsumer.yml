@@ -1,0 +1,47 @@
+# Server Configuration
+server:
+  port: 25672
+
+#Srping Application Configuration
+spring:
+  application:
+    name: rabbitmq-consumer
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: root
+    password: root
+    cache:
+      channel:
+        size: 1
+        checkout-timeout: 0
+    listener:
+      simple:
+        acknowledge-mode: auto
+        retry:
+          enabled: true # 재시도
+          initial-interval: 3s # 처음 메세지 처리 실패시 N초 후에 다시 해당 메세지를 처리
+          max-interval: 10s # 최대 N초 후에 실패한 메세지를 처리
+          max-attempts: 2 # 최대 N번까지만 메세지 처리를 시도. 만약 N을 넘어가면 해당 메세지는 dlx exchange로 넘긴다.
+          multiplier: 2 # 동일 메세지에 대한 처리 시도 횟수가 증가할 수록 interval 시간에 N을 곱한다. 예를 들어 처음엔 3초를 기다린 후 재시도했다면 다음 횟수에서는 6초를, 다음 횟수에서는 12초를 기다린 후 메세지 처리를 시도한다. 만약 initial-interval * multiplier > max-interval 일 경우에는 max-interval 값을 사용한다.
+    connection-timeout: 10000
+
+#RabbitMQ Configuration
+rabbitmq:
+  playground:
+    queue:
+      name: playgroud
+    exchange:
+      name: playgroud.exchange
+    routing-key:
+      name: playgroud.routing-key
+
+#Eureka Configuration
+eureka:
+  instance:
+    instance-id: ${spring.cloud.client.hostname}:${spring.application.instance_id:${random.value}}
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/

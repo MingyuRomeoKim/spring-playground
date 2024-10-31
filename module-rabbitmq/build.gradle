@@ -1,0 +1,17 @@
+bootJar {
+    enabled = false
+}
+
+jar {
+    enabled = true
+}
+
+subprojects {
+    dependencies {
+        implementation project(':module-core')
+
+        // rabbitmq
+        implementation 'org.springframework.boot:spring-boot-starter-amqp'
+        implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+    }
+}
