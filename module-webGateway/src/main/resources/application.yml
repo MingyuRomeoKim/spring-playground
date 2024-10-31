@@ -52,6 +52,14 @@ spring:
         - id: article-api
           uri: lb://article-api
           predicates:
+            - Path=/api/v1/article/test
+          filters:
+            - AddRequestHeader=first-request, first-request-header2
+            - AddResponseHeader=first-response, first-response-header2
+
+        - id: article-api
+          uri: lb://article-api
+          predicates:
             - Path=/api/v1/article/**
           filters:
             - AddRequestHeader=first-request, first-request-header2

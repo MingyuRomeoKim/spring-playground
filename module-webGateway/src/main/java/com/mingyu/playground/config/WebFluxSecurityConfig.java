@@ -17,29 +17,10 @@ import org.springframework.security.web.server.context.ServerSecurityContextRepo
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
-import java.nio.charset.StandardCharsets;
-import java.security.Key;
-
 @Configuration
 @EnableWebFluxSecurity
 @RequiredArgsConstructor
 public class WebFluxSecurityConfig {
-
-    private final Environment environment;
-
-    // All Allowed Pages
-    String[] allAllowPages = {
-            "/swagger-ui/**",     // Swagger UI 관련 리소스
-            "/v3/api-docs/**",     // Swagger API 문서 리소스
-            "/swagger-resources/**" // Swagger 추가 리소스
-    };
-
-    // Un Login User Allowed Pages
-    String[] unLoginUserAllowedPages = {
-            "/api/v1/auth/login", // 로그인 API,
-            "/api/v1/auth/loout", // 로그인 API,
-            "/api/v1/auth/signup", // 회원가입 API
-    };
 
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity serverHttpSecurity, JwtTokenizer jwtTokenizer) {
