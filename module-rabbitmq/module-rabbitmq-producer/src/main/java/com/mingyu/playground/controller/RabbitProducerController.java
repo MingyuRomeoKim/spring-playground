@@ -2,9 +2,12 @@ package com.mingyu.playground.controller;
 
 import com.mingyu.playground.dto.SendMessageRequestDto;
 import com.mingyu.playground.service.RabbitProducerService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+@Validated
 @RestController
 @RequestMapping("/rabbitmq/producer")
 @RequiredArgsConstructor
@@ -18,7 +21,7 @@ public class RabbitProducerController {
     }
 
     @PutMapping("/send")
-    public String sendMessage(@RequestBody SendMessageRequestDto sendMessageRequestDto) {
+    public String sendMessage(@Valid @RequestBody SendMessageRequestDto sendMessageRequestDto) {
 
         if (sendMessageRequestDto.getExchangeName() != null && sendMessageRequestDto.getRoutingKeyName() != null) {
             rabbitProducerService.sendMessage(sendMessageRequestDto.getExchangeName(), sendMessageRequestDto.getRoutingKeyName(), sendMessageRequestDto.getMessage());
