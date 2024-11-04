@@ -4,5 +4,5 @@ import java.util.Map;
 
 public interface EmailService {
     void sendEmail(String email, String subject, String content);
-    String setContext(String templateName, Map<String,String> contextMap);
+    String setContext(String jsonContent);
 }

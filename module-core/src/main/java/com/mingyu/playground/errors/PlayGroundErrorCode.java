@@ -22,6 +22,14 @@ public enum PlayGroundErrorCode {
     // LOG ERROR
     LOG_ERROR_WRONG_DATA("E300", "올바르지 않는 데이터입니다."),
 
+    // JSON
+    JSON_MAPPING_ERROR("E400", "JSON 매핑에 실패하였습니다."),
+    JSON_PARSING_ERROR("E401", "JSON 파싱에 실패하였습니다."),
+    JSON_PROCESSING_ERROR("E402", "JSON 처리에 실패하였습니다."),
+    JSON_EMPTY("E403", "JSON이 비어있습니다."),
+
+    // Email
+    EMAIL_TEMPLATE_NOT_FOUND("E500", "이메일 템플릿을 찾을 수 없습니다."),
     ;
 
     private final String code;

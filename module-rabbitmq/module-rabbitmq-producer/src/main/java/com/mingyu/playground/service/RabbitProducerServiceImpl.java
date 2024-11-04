@@ -10,9 +10,9 @@ import org.springframework.stereotype.Service;
 public class RabbitProducerServiceImpl implements RabbitProducerService {
 
     private final RabbitTemplate rabbitTemplate;
-    @Value("${rabbitmq.playground.exchange.name}")
+    @Value("${rabbitmq.playground.mail.exchange.name}")
     private String exchangeName;
-    @Value("${rabbitmq.playground.routing-key.name}")
+    @Value("${rabbitmq.playground.mail.routing-key.name}")
     private String routingKeyName;
 
     @Override

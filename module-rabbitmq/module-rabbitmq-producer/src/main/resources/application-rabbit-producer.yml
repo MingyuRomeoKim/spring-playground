@@ -29,18 +29,19 @@ spring:
 #RabbitMQ Configuration
 rabbitmq:
   playground:
-    queue:
-      name: playground
-    exchange:
-      name: playground.exchange
-    routing-key:
-      name: playground.routing-key
-    dead-letter-queue:
-      name: playground.dead-letter-queue
-    dead-letter-exchange:
-      name: playground.dead-letter-exchange
-    dead-letter-routing-key:
-      name: playground.dead-letter-routing-key
+    mail:
+      queue:
+        name: playground.mail
+      exchange:
+        name: playground.mail.exchange
+      routing-key:
+        name: playground.mail.routing-key
+      dead-letter-queue:
+        name: playground.mail.dead-letter-queue
+      dead-letter-exchange:
+        name: playground.mail.dead-letter-exchange
+      dead-letter-routing-key:
+        name: playground.mail.dead-letter-routing-key
 
 #Eureka Configuration
 eureka:

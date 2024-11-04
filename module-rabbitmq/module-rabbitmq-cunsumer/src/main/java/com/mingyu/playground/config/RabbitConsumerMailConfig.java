@@ -9,28 +9,28 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class RabbitConsumerConfig {
+public class RabbitConsumerMailConfig {
 
-    @Value("${rabbitmq.playground.queue.name}")
+    @Value("${rabbitmq.playground.mail.queue.name}")
     private String queueName;
 
-    @Value("${rabbitmq.playground.exchange.name}")
+    @Value("${rabbitmq.playground.mail.exchange.name}")
     private String exchangeName;
 
-    @Value("${rabbitmq.playground.routing-key.name}")
+    @Value("${rabbitmq.playground.mail.routing-key.name}")
     private String routingKeyName;
 
-    @Value("${rabbitmq.playground.dead-letter-queue.name}")
+    @Value("${rabbitmq.playground.mail.dead-letter-queue.name}")
     private String deadLetterQueueName;
 
-    @Value("${rabbitmq.playground.dead-letter-exchange.name}")
+    @Value("${rabbitmq.playground.mail.dead-letter-exchange.name}")
     private String deadLetterExchangeName;
 
-    @Value("${rabbitmq.playground.dead-letter-routing-key.name}")
+    @Value("${rabbitmq.playground.mail.dead-letter-routing-key.name}")
     private String deadLetterRoutingKeyName;
 
     @Bean
-    public Queue playgroundQueue() {
+    public Queue playgroundMailQueue() {
         Queue queue = new Queue(queueName, true);
         queue.addArgument("x-dead-letter-exchange", deadLetterExchangeName);
         queue.addArgument("x-dead-letter-routing-key", deadLetterRoutingKeyName);
@@ -39,27 +39,27 @@ public class RabbitConsumerConfig {
     }
 
     @Bean
-    public Queue playgroundDeadLetterQueue() {
+    public Queue playgroundMailDeadLetterQueue() {
         return new Queue(deadLetterQueueName, true);
     }
 
     @Bean
-    public TopicExchange playgroundExchange() {
+    public TopicExchange playgroundMailExchange() {
         return new TopicExchange(exchangeName);
     }
 
     @Bean
-    public TopicExchange playgroundDeadLetterExchange() {
+    public TopicExchange playgroundMailDeadLetterExchange() {
         return new TopicExchange(deadLetterExchangeName);
     }
 
     @Bean
-    public Binding playgroundBinding() {
-        return BindingBuilder.bind(playgroundQueue()).to(playgroundExchange()).with(routingKeyName);
+    public Binding playgroundMailBinding() {
+        return BindingBuilder.bind(playgroundMailQueue()).to(playgroundMailExchange()).with(routingKeyName);
     }
 
     @Bean
-    public Binding playgroundDeadLetterBinding() {
-        return BindingBuilder.bind(playgroundDeadLetterQueue()).to(playgroundDeadLetterExchange()).with(deadLetterRoutingKeyName);
+    public Binding playgroundMailDeadLetterBinding() {
+        return BindingBuilder.bind(playgroundMailDeadLetterQueue()).to(playgroundMailDeadLetterExchange()).with(deadLetterRoutingKeyName);
     }
 }
