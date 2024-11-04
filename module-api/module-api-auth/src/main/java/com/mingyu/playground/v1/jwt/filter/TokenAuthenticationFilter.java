@@ -2,6 +2,7 @@ package com.mingyu.playground.v1.jwt.filter;
 
 import com.mingyu.playground.errors.PlayGroundCommonException;
 import com.mingyu.playground.errors.PlayGroundErrorCode;
+import com.mingyu.playground.service.AuthLoginService;
 import com.mingyu.playground.v1.entity.Authority;
 import com.mingyu.playground.v1.jwt.infrastructure.CustomUserDetails;
 import com.mingyu.playground.v1.jwt.infrastructure.JwtAuthenticationToken;
@@ -17,6 +18,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -33,6 +35,7 @@ import java.util.List;
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenizer jwtTokenizer;
+    private final AuthLoginService authLoginService;
 
     /**
      * 필터 메서드
@@ -46,7 +49,8 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
      */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String token = getToken(request); // 요청에서 토큰을 추출
+//        String token = getTokenFromCookie(request); // 요청에서 토큰을 추출 - Cookie
+        String token = getTokenFromSession(request); // 요청에서 토큰을 추출 - Session
 
         if (StringUtils.hasText(token)) {
             try {
@@ -103,7 +107,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
      * @param request 요청 객체
      * @return JWT 토큰
      */
-    private String getToken(HttpServletRequest request) {
+    private String getTokenFromCookie(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies(); // 쿠키에서 토큰을 찾음
 
         if (cookies != null) {
@@ -115,5 +119,19 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         }
 
         return null; // 토큰을 찾지 못한 경우 null 반환
+    }
+
+    private String getTokenFromSession(HttpServletRequest request) {
+        String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+        if (authorizationHeader != null) {
+            String jwt = authorizationHeader.replace("Bearer ", "");
+
+            log.info("jwt : {}", jwt);
+
+            if (authLoginService.isLogin(jwt)) {
+                return jwt;
+            }
+        }
+        return null;
     }
 }

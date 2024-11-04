@@ -1,6 +1,7 @@
 package com.mingyu.playground.config;
 
 
+import com.mingyu.playground.service.AuthLoginService;
 import com.mingyu.playground.v1.jwt.filter.TokenAuthenticationFilter;
 import com.mingyu.playground.v1.jwt.util.JwtTokenizer;
 import org.springframework.context.annotation.Bean;
@@ -38,7 +39,7 @@ public class WebSecurityConfig {
     };
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, JwtTokenizer jwtTokenizer) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, JwtTokenizer jwtTokenizer, AuthLoginService authLoginService) throws Exception {
         httpSecurity
                 .cors(Customizer.withDefaults()) // cors 설정
                 .csrf(AbstractHttpConfigurer::disable); // csrf 비활성화
@@ -63,7 +64,7 @@ public class WebSecurityConfig {
 
         // JWT 필터 사용
         httpSecurity.addFilter(this.corsFilter());
-        httpSecurity.addFilterBefore(new TokenAuthenticationFilter(jwtTokenizer), UsernamePasswordAuthenticationFilter.class);
+        httpSecurity.addFilterBefore(new TokenAuthenticationFilter(jwtTokenizer, authLoginService), UsernamePasswordAuthenticationFilter.class);
 
         return httpSecurity.build();
     }

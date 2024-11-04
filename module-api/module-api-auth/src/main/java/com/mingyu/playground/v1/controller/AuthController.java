@@ -5,6 +5,7 @@ import com.mingyu.playground.dto.auth.request.AuthLoginRequestDto;
 import com.mingyu.playground.dto.auth.request.AuthSignUpRequestDto;
 import com.mingyu.playground.dto.auth.response.AuthLoginResponseDto;
 import com.mingyu.playground.response.PlayGroundResponse;
+import com.mingyu.playground.service.AuthLoginService;
 import com.mingyu.playground.v1.jwt.util.JwtTokenizer;
 import com.mingyu.playground.v1.service.AuthService;
 import com.mingyu.playground.v1.service.TokenService;
@@ -20,6 +21,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Description;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +35,7 @@ public class AuthController {
 
     private final AuthService authService;
     private final TokenService tokenService;
+    private final AuthLoginService authLoginService;
 
     @Operation(summary = "로그인", description = "회원 아이디와 비밀번호를 가지고 로그인 후 access 토큰을 발급합니다.")
     @ApiResponses({
@@ -46,18 +49,9 @@ public class AuthController {
         // 인증처리
         AuthLoginResponseDto authLoginResponseDto = authService.login(authLoginRequestDto);
 
-        // Token 쿠키 저장
-        Cookie accessTokenCookie = new Cookie("accessToken", authLoginResponseDto.getAccessToken());
-        accessTokenCookie.setHttpOnly(true);
-        accessTokenCookie.setPath("/");
-        accessTokenCookie.setMaxAge(Math.toIntExact(JwtTokenizer.accessTokenExpire / 1000));
-        httpServletResponse.addCookie(accessTokenCookie);
+        //setTokenInToCookie(httpServletResponse, authLoginResponseDto);
 
-        Cookie refreshTokenCookie = new Cookie("refreshToken", authLoginResponseDto.getRefreshToken());
-        refreshTokenCookie.setHttpOnly(true);
-        refreshTokenCookie.setPath("/");
-        refreshTokenCookie.setMaxAge(Math.toIntExact(JwtTokenizer.refreshTokenExpire / 1000));
-        httpServletResponse.addCookie(refreshTokenCookie);
+        setTokenInToRedis(authLoginResponseDto);
 
         return PlayGroundResponse.build(authLoginResponseDto);
     }
@@ -70,6 +64,51 @@ public class AuthController {
     @Description("Logout")
     @DeleteMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+        String authorizationHeader = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
+        String accessToken = authorizationHeader.replace("Bearer ", "");
+
+//        String accessToken = removeTokenOnTheCookie(httpServletRequest, httpServletResponse);
+        removeTokenOnTheRedis(accessToken);
+
+        // tokens 데이터 삭제
+        tokenService.deleteByAccessToken(accessToken);
+        return PlayGroundResponse.ok();
+    }
+
+    @Operation(summary = "회원가입", description = "회원가입을 진행합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK",
+                    content = @Content(schema = @Schema(implementation = PlayGroundResponse.class))),
+            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
+    })
+    @PostMapping("/signup")
+    public ResponseEntity<?> signup(@Valid @RequestBody AuthSignUpRequestDto authSignUpRequestDto) {
+        authService.signup(authSignUpRequestDto);
+        return PlayGroundResponse.ok();
+    }
+
+
+    private void setTokenInToCookie(HttpServletResponse httpServletResponse, AuthLoginResponseDto authLoginResponseDto) {
+        // Token 쿠키 저장
+        Cookie accessTokenCookie = new Cookie("accessToken", authLoginResponseDto.getAccessToken());
+        accessTokenCookie.setHttpOnly(true);
+        accessTokenCookie.setPath("/");
+        accessTokenCookie.setMaxAge(Math.toIntExact(JwtTokenizer.accessTokenExpire / 1000));
+        httpServletResponse.addCookie(accessTokenCookie);
+
+        Cookie refreshTokenCookie = new Cookie("refreshToken", authLoginResponseDto.getRefreshToken());
+        refreshTokenCookie.setHttpOnly(true);
+        refreshTokenCookie.setPath("/");
+        refreshTokenCookie.setMaxAge(Math.toIntExact(JwtTokenizer.refreshTokenExpire / 1000));
+        httpServletResponse.addCookie(refreshTokenCookie);
+    }
+
+    private void setTokenInToRedis(AuthLoginResponseDto authLoginResponseDto) {
+        // Token Redis 저장
+        authLoginService.login(authLoginResponseDto.getAccessToken());
+    }
+
+    private String removeTokenOnTheCookie(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
         String accessToken = null;
 
         // access / refresh Token cookie 삭제
@@ -89,21 +128,10 @@ public class AuthController {
             }
         }
 
-        // tokens 데이터 삭제
-        tokenService.deleteByAccessToken(accessToken);
-        return PlayGroundResponse.ok();
+        return accessToken;
     }
 
-    @Operation(summary = "회원가입", description = "회원가입을 진행합니다.")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "OK",
-                    content = @Content(schema = @Schema(implementation = PlayGroundResponse.class))),
-            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
-    })
-    @PostMapping("/signup")
-    public ResponseEntity<?> signup(@Valid @RequestBody AuthSignUpRequestDto authSignUpRequestDto) {
-        authService.signup(authSignUpRequestDto);
-        return PlayGroundResponse.ok();
+    private void removeTokenOnTheRedis(String accessToken) {
+        authLoginService.logout(accessToken);
     }
-
 }
