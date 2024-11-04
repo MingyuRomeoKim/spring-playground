@@ -18,10 +18,6 @@ Content-Type: application/json
 Accept: application/json
 Authorization: Bearer {{auth_token}}
 
-> {%
-    client.global.set("auth_token", '');
-%}
-
 ### 회원가입
 POST {{host}}/api/v1/auth/signup
 Content-Type: application/json

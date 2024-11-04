@@ -26,7 +26,21 @@ spring:
           multiplier: 2 # 동일 메세지에 대한 처리 시도 횟수가 증가할 수록 interval 시간에 N을 곱한다. 예를 들어 처음엔 3초를 기다린 후 재시도했다면 다음 횟수에서는 6초를, 다음 횟수에서는 12초를 기다린 후 메세지 처리를 시도한다. 만약 initial-interval * multiplier > max-interval 일 경우에는 max-interval 값을 사용한다.
         auto-startup: true
     connection-timeout: 10000
-
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: [your-smtp-email]
+    password: [your-smtp-password]
+    properties:
+      mail:
+        smtp:
+            auth: true
+            debug: true
+            connectiontimeout: 10000
+            starttls:
+                enable: true
+        starttls:
+            enable: true
 #RabbitMQ Configuration
 rabbitmq:
   playground:
