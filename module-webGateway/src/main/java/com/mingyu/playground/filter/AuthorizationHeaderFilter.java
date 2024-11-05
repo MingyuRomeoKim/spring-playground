@@ -1,5 +1,6 @@
 package com.mingyu.playground.filter;
 
+import com.mingyu.playground.service.AuthLoginService;
 import com.mingyu.playground.util.JwtTokenizer;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -7,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.core.env.Environment;
@@ -27,10 +29,13 @@ import java.util.Collections;
 public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<AuthorizationHeaderFilter.Config> {
 
     private final JwtTokenizer jwtTokenizer;
+    private final AuthLoginService authLoginService;
 
-    public AuthorizationHeaderFilter(JwtTokenizer jwtTokenizer) {
+    @Autowired
+    public AuthorizationHeaderFilter(JwtTokenizer jwtTokenizer, AuthLoginService authLoginService) {
         super(Config.class);
         this.jwtTokenizer = jwtTokenizer;
+        this.authLoginService = authLoginService;
     }
 
     @Override
@@ -59,6 +64,12 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
                 return response.setComplete();
             }
 
+            // Logout Token 검증
+            if (isLogoutToken(jwt)) {
+                response.setStatusCode(HttpStatus.UNAUTHORIZED);
+                return response.setComplete();
+            }
+
             return chain.filter(exchange);
 
         };
@@ -84,6 +95,10 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
         String id = claims.get("id", String.class); // 사용자 ID를 가져옴
         String name = claims.get("name", String.class); // 이름을 가져옴
         return true;
+    }
+
+    private boolean isLogoutToken(String jwt) {
+        return !authLoginService.isLogin(jwt);
     }
 
     public static class Config {}

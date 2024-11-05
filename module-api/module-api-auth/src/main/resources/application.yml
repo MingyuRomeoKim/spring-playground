@@ -12,7 +12,7 @@ spring:
 #Eureka Configuration
 eureka:
   instance:
-    instance-id: ${spring.cloud.client.hostname}:${spring.application.instance_id:${random.value}}
+    instance-id: ${spring.cloud.client.hostname}:${spring.application.instance-id:${random.value}}
   client:
     register-with-eureka: true
     fetch-registry: true

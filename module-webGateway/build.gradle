@@ -6,6 +6,9 @@ jar {
 }
 
 dependencies {
+    implementation project(':module-core')
+    implementation project(':module-redis')
+
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
     // Spring Cloud
