@@ -26,6 +26,7 @@ gradle-app.setting
 
 # Logs
 logs/
+pids/
 
 # VS Code
 .vscode/

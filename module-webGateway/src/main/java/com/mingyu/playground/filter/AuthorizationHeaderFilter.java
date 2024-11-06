@@ -66,7 +66,7 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
 
             // Logout Token 검증
             if (isLogoutToken(jwt)) {
-                response.setStatusCode(HttpStatus.UNAUTHORIZED);
+                response.setStatusCode(HttpStatus.FORBIDDEN);
                 return response.setComplete();
             }
 

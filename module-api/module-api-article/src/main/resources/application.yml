@@ -8,6 +8,7 @@ spring:
     include:
       - database
       - redis
+    active: local
 
 #Eureka Configuration
 eureka:
