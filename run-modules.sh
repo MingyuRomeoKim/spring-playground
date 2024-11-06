@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # 실행할 모듈 목록과 해당 포트 정의 (순서 지정)
-MODULES=("module-eureka" "module-webGateway" "module-api/module-api-auth" "module-api/module-api-article")
-PORTS=("8761" "8080" "18081" "18082")
+MODULES=("module-eureka" "module-webGateway" "module-api/module-api-auth" "module-api/module-api-article" "module-rabbitmq/module-rabbitmq-cunsumer" "module-rabbitmq/module-rabbitmq-producer")
+PORTS=("8761" "8080" "18081" "18082" "25672" "25673")
 MAX_WAIT=60  # 최대 대기 시간 (초)
 WAIT_TIME=0
 
@@ -12,8 +12,10 @@ BASE_DIR=$(pwd)
 # logs 및 pids 디렉토리 생성
 mkdir -p logs
 mkdir -p logs/module-api
+mkdir -p logs/module-rabbitmq
 mkdir -p pids
 mkdir -p pids/module-api
+mkdir -p pids/module-rabbitmq
 
 chmod -R 755 logs
 chmod -R 755 pids
@@ -24,7 +26,7 @@ echo "Stopping all modules..."
 
 # 1. 전체 프로젝트 빌드
 echo "Building the project..."
-#./gradlew clean build
+./gradlew clean build
 
 if [ $? -ne 0 ]; then
     echo "Build failed. Exiting."

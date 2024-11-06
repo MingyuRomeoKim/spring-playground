@@ -6,8 +6,6 @@ server:
 spring:
   application:
     name: rabbitmq-consumer
-  profiles:
-    active: rabbit-cunsumer
   rabbitmq:
     host: localhost
     port: 5672
