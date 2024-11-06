@@ -6,6 +6,7 @@ app:
   ports:
     auth-api: 18081
     article-api: 18082
+    mail-api: 18083
 
 
 eureka:
@@ -77,6 +78,15 @@ spring:
             - AddRequestHeader=first-request, first-request-header2
             - AddResponseHeader=first-response, first-response-header2
             - AuthorizationHeaderFilter
+
+        - id: mail-api
+          uri: lb://mail-api
+          predicates:
+            - Path=/api/v1/mail/**
+          filters:
+            - AddRequestHeader=first-request, first-request-header2
+            - AddResponseHeader=first-response, first-response-header2
+            - AuthorizationHeaderFilter
   main:
     web-application-type: reactive
 
@@ -93,10 +103,13 @@ springdoc:
   swagger-ui:
     urls[0]:
       name: Auth API
-      url: ${server.host}:${app.ports.auth-api}/v3/api-docs
+      url: ${server.host}:${app.ports.auth-api}/api/v1/auth/v3/api-docs
     urls[1]:
       name: Article API
       url: ${server.host}:${app.ports.article-api}/api/v1/article/v3/api-docs
+    urls[2]:
+      name: Mail API
+      url: ${server.host}:${app.ports.mail-api}/api/v1/mail/v3/api-docs
     use-root-path: true
     enabled: true
     path: /swagger-ui.html

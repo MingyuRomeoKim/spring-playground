@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # 실행할 모듈 목록과 해당 포트 정의 (순서 지정)
-MODULES=("module-eureka" "module-webGateway" "module-api/module-api-auth" "module-api/module-api-article" "module-rabbitmq/module-rabbitmq-cunsumer" "module-rabbitmq/module-rabbitmq-producer")
-PORTS=("8761" "8080" "18081" "18082" "25672" "25673")
+MODULES=("module-eureka" "module-webGateway" "module-api/module-api-auth" "module-api/module-api-article" "module-api/module-api-mail" "module-rabbitmq/module-rabbitmq-cunsumer")
+PORTS=("8761" "8080" "18081" "18082" "18083" "25672")
 MAX_WAIT=60  # 최대 대기 시간 (초)
 WAIT_TIME=0
 

@@ -1,4 +1,4 @@
-package com.mingyu.playground.dto;
+package com.mingyu.playground.dto.request;
 
 import com.mingyu.playground.validations.JsonMatches;
 import jakarta.validation.constraints.NotBlank;

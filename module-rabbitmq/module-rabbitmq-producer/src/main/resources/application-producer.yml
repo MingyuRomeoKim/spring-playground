@@ -1,11 +1,5 @@
-# Server Configuration
-server:
-  port: 25673
-
 #Srping Application Configuration
 spring:
-  application:
-    name: rabbitmq-producer
   rabbitmq:
     host: localhost
     port: 5672
@@ -42,13 +36,3 @@ rabbitmq:
         name: playground.mail.dead-letter-exchange
       dead-letter-routing-key:
         name: playground.mail.dead-letter-routing-key
-
-#Eureka Configuration
-eureka:
-  instance:
-    instance-id: ${spring.cloud.client.hostname}:${spring.application.instance-id:${random.value}}
-  client:
-    register-with-eureka: true
-    fetch-registry: true
-    service-url:
-      defaultZone: http://localhost:8761/eureka/

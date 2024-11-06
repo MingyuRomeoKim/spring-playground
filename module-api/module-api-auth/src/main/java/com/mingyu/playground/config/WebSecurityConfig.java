@@ -31,7 +31,7 @@ public class WebSecurityConfig {
     // All Allowed Pages
     String[] allAllowPages = {
             "/swagger-ui/**",     // Swagger UI 관련 리소스
-            "/v3/api-docs/**",     // Swagger API 문서 리소스
+            "/api/v1/auth/v3/api-docs/**",     // Swagger API 문서 리소스
             "/swagger-resources/**" // Swagger 추가 리소스
     };
 

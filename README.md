@@ -15,8 +15,9 @@
   2. module-webGateway
   3. module-api/module-api-auth
   4. module-api/module-api-article
-  5. module-rabbitmq-consumer
-  6. module-rabbitmq-producer
+  5. module-api/module-api-mail
+  6module-rabbitmq-consumer
+ 
 - IDE 사용하지 않고, Terminal 환경에서 실행시 run-modules.sh를 실행하고 종료를 원할 시 stop-modules.sh를 실행합니다.
 - 엔티티 토대로 table 자동생성을 원할 경우, <mark>module-database</mark> 모듈의 application.yml 파일의 hibernate 설정을 변경합니다.
   - spring.jpa.hibernate.ddl-auto: update
