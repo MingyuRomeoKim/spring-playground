@@ -1,5 +1,12 @@
 server:
   port: 8080
+  host: http://localhost
+
+app:
+  ports:
+    auth-api: 18081
+    article-api: 18082
+
 
 eureka:
   client:
@@ -85,9 +92,12 @@ management:
 springdoc:
   swagger-ui:
     urls[0]:
-      name: Member API
-      url: ${app.host}/api/v1/member/v3/api-docs
+      name: Auth API
+      url: ${server.host}:${app.ports.auth-api}/v3/api-docs
     urls[1]:
       name: Article API
-      url: ${app.host}/api/v1/article/v3/api-docs
+      url: ${server.host}:${app.ports.article-api}/api/v1/article/v3/api-docs
     use-root-path: true
+    enabled: true
+    path: /swagger-ui.html
+    config-url: /v3/api-docs/swagger-config

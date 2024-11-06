@@ -1,13 +1,5 @@
 # spring-playground 동작 전 사전 준비
 
-## 0. swagger - api 문서 확인
-현재 디폴트 포트 8080 사용중입니다. api 문서는 security 설정이 되어 있지 않아 누구나 접근 가능합니다.
-
-```html
-http://localhost:8080/swagger-ui/index.html#/
-```
-***
-
 ## 1. mysql 설치 및 실행
 ### 1.1. docker desktop install (mac)
 ```shell

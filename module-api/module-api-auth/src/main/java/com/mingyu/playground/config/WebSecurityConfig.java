@@ -21,6 +21,9 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
@@ -36,6 +39,11 @@ public class WebSecurityConfig {
     String[] unLoginUserAllowedPages = {
             "/api/v1/auth/login", // 로그인 API,
             "/api/v1/auth/signup", // 회원가입 API
+    };
+
+    String[] allowedOrigins = {
+            "http://localhost:8080",
+            "https://localhost:8080"
     };
 
     @Bean
@@ -71,6 +79,8 @@ public class WebSecurityConfig {
 
     @Bean
     public CorsFilter corsFilter() {
+
+
         CorsConfiguration config = new CorsConfiguration();
 
         config.setAllowCredentials(true);
@@ -89,7 +99,7 @@ public class WebSecurityConfig {
         config.addAllowedMethod("OPTIONS");
         config.addAllowedMethod("HEAD");
 
-        config.addAllowedOriginPattern("*");
+        Arrays.stream(allowedOrigins).forEach(config::addAllowedOrigin);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);

@@ -21,5 +21,6 @@ dependencies {
     // Mac Os Dependency
     implementation 'io.netty:netty-resolver-dns-native-macos:4.1.68.Final:osx-aarch_64'
 
-
+    // Swagger
+    implementation 'org.springdoc:springdoc-openapi-starter-webflux-ui:2.6.0'
 }
