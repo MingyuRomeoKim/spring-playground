@@ -83,3 +83,13 @@ GET foo
 ```shell
 - docker run -d --name rabbitmq -p 5672:5672 -p 15672:15672 --restart=unless-stopped -e RABBITMQ_DEFAULT_USER=root -e RABBITMQ_DEFAULT_PASS=root rabbitmq:management
 ```
+
+## 4. Vault 설치 및 실행
+### 4.1 vault image install & run (local)
+```shell
+docker run -d -p 8200:8200 --name vault -e 'VAULT_DEV_ROOT_TOKEN_ID=playground' -e 'VAULT_DEV_LISTEN_ADDRESS=0.0.0.0:8200' vault:1.13.3
+```
+
+### 4.2 접속 후 root token 입력하여 로그인
+> - http://localhost:8200/ui/vault/auth?with=token
+> - root token: playground

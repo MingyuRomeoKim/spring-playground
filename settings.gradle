@@ -16,4 +16,5 @@ include 'module-rabbitmq:module-rabbitmq-producer'
 findProject(':module-rabbitmq:module-rabbitmq-producer')?.name = 'module-rabbitmq-producer'
 include 'module-api:module-api-mail'
 findProject(':module-api:module-api-mail')?.name = 'module-api-mail'
+include 'module-configServer'
 
