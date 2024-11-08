@@ -1,6 +1,6 @@
 #!/bin/bash
 
-MODULES=("module-eureka" "module-webGateway" "module-api/module-api-auth" "module-api/module-api-article" "module-api/module-api-mail" "module-rabbitmq/module-rabbitmq-cunsumer")
+MODULES=("module-eureka" "module-configServer" "module-webGateway" "module-api/module-api-auth" "module-api/module-api-article" "module-api/module-api-mail" "module-rabbitmq/module-rabbitmq-cunsumer")
 
 # pids 디렉토리 경로
 PID_DIR="pids"

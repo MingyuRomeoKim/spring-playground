@@ -12,11 +12,12 @@
 - intellij에서 spring-playground 프로젝트를 실행합니다.
 - 실행 순서는 다음과 같습니다.
   1. module-eureka
-  2. module-webGateway
-  3. module-api/module-api-auth
-  4. module-api/module-api-article
-  5. module-api/module-api-mail
-  6module-rabbitmq-consumer
+  2. module-configServer
+  3. module-webGateway
+  4. module-api/module-api-auth
+  5. module-api/module-api-article
+  6. module-api/module-api-mail
+  7. module-rabbitmq-consumer
  
 - IDE 사용하지 않고, Terminal 환경에서 실행시 run-modules.sh를 실행하고 종료를 원할 시 stop-modules.sh를 실행합니다.
 - 엔티티 토대로 table 자동생성을 원할 경우, <mark>module-database</mark> 모듈의 application.yml 파일의 hibernate 설정을 변경합니다.
