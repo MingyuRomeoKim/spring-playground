@@ -43,7 +43,9 @@ public class WebSecurityConfig {
 
     String[] allowedOrigins = {
             "http://localhost:8080",
-            "https://localhost:8080"
+            "https://localhost:8080",
+            "http://localhost:8888",
+            "https://localhost:8888"
     };
 
     @Bean

@@ -17,7 +17,6 @@ spring:
           scheme: http
           backend: secret
           default-key: dev
-          profile-separator: /
           authentication: TOKEN
           token: playground
           kv-version: 2
