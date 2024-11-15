@@ -33,6 +33,10 @@ public final class Result {
         return new ResponseEntity<>(apiResponseMessage, HttpStatus.OK);
     }
 
+    public static <T> ResponseEntity<ApiResponseMessage<T>> error(ApiResponseMessage<T> apiResponseMessage) {
+        return new ResponseEntity<>(apiResponseMessage, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
     public static ResponseEntity<ApiResult> forbidden() {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
